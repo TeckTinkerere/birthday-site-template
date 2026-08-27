@@ -1,135 +1,143 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import Particles, { ParticlesProvider } from "@tsparticles/react"
+import { loadBubblesPreset } from "@tsparticles/preset-bubbles"
+import useReduceMotion from "@/lib/use-reduce-motion"
+import { Volume2, VolumeX } from "lucide-react"
 import Countdown from "@/components/countdown"
-import BirthdayCelebration from "@/components/birthday-celebration"
-import Confetti from "@/components/confetti"
-import FloatingHearts from "@/components/floating-hearts"
-import Loader from "@/components/Loader"
-import { MoveRight, PartyPopper } from "lucide-react"
+import LetterJourney from "@/components/letter-journey"
+import { BIRTHDAY } from "@/lib/content"
+
+const ATMOSPHERE_CLASS = {
+  celebration: "atmosphere-celebration",
+  quiet: "atmosphere-quiet",
+  hope: "atmosphere-hope",
+  light: "atmosphere-light",
+}
+
+const initBubbles = (engine) => loadBubblesPreset(engine)
+
+/**
+ * The bubbles preset ships loud — speed 15, random colours, an opaque white
+ * background and emitters firing in bursts. Everything below tones it down to
+ * a slow drift of soft pink over whatever gradient the chapter is using.
+ */
+const BUBBLE_OPTIONS = {
+  preset: "bubbles",
+  fullScreen: { enable: false },
+  background: { color: "transparent" },
+  emitters: [],
+  detectRetina: true,
+  fpsLimit: 60,
+  particles: {
+    number: { value: 26, density: { enable: true } },
+    paint: { fill: { enable: true, color: { value: "#f2b8cd" } } },
+    color: { value: ["#f7cede", "#efb3c9", "#ffffff", "#e9a7bf"] },
+    opacity: { value: { min: 0.12, max: 0.4 } },
+    size: { value: { min: 5, max: 20 } },
+    move: {
+      enable: true,
+      speed: { min: 0.3, max: 0.9 },
+      direction: "top",
+      straight: false,
+      outModes: { default: "out" },
+    },
+  },
+}
+
+const ATMOSPHERE_VOLUME = {
+  celebration: 0.4,
+  quiet: 0.22,
+  hope: 0.42,
+  light: 0.3,
+}
 
 export default function Home() {
-  const [isBirthday, setIsBirthday] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [bubbles, setBubbles] = useState([])
-  const [showForYouBtn, setShowForYouBtn] = useState(false)
-  const birthdayDate = new Date("April 28, 2025") // Change this date accordingly
+  const reduceMotion = useReduceMotion()
+  const [hasOpened, setHasOpened] = useState(false)
+  const [canOpen, setCanOpen] = useState(false)
+  const [atmosphere, setAtmosphere] = useState("celebration")
+  const [isMuted, setIsMuted] = useState(false)
   const audioRef = useRef(null)
 
-  // For testing
-  // const birthdayDate = new Date("2025-04-23T22:03:00+05:30")
-
+  // The letter unlocks on the day itself. ?preview=1 exists so the letter can
+  // be proof-read beforehand.
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 1500);
+    const isPreview = new URLSearchParams(window.location.search).has("preview")
+    if (isPreview || Date.now() >= BIRTHDAY.getTime()) setCanOpen(true)
   }, [])
 
-  const startCelebration = () => {
-    setShowForYouBtn(false)
-    setIsBirthday(true)
-    // Play the song
-    if (audioRef.current) {
-      audioRef.current.volume = 0.8;
-      audioRef.current.play().catch((e) => {
-        console.log("Autoplay prevented, user interaction needed", e)
-      })
-    }
-  }
-
   useEffect(() => {
-    const generated = Array.from({ length: 20 }).map(() => ({
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      color: ["bg-pink-300", "bg-purple-300", "bg-yellow-300", "bg-violet-300", "bg-rose-300"][Math.floor(Math.random() * 3)],
-      size: 16 + Math.floor(Math.random() * 8),
-      duration: 3 + Math.random() * 2,
-      delay: Math.random() * 5
-    }))
-    setBubbles(generated)
-  }, [])
+    const audio = audioRef.current
+    if (!audio) return
+    audio.volume = isMuted ? 0 : (ATMOSPHERE_VOLUME[atmosphere] ?? 0.3)
+  }, [atmosphere, isMuted, hasOpened])
 
-  if (isLoading) {
-    return (
-      <Loader />
-    )
-  }
+  const openLetter = useCallback(() => {
+    setHasOpened(true)
+    setAtmosphere("quiet")
+    audioRef.current?.play().catch(() => {
+      // Some browsers still refuse; the letter reads fine in silence.
+    })
+  }, [])
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-rose-100 to-purple-100 flex flex-col items-center justify-center p-4 overflow-hidden">
-      {isBirthday && <Confetti />}
-      <FloatingHearts />
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="relative z-10 w-full max-w-3xl mx-auto"
-      >
-        <motion.div className="bg-white bg-opacity-80 backdrop-blur-sm rounded-3xl shadow-xl shadow-rose-100 p-8 border-2 border-rose-200"
-          initial={{ scale: 0.9 }}
-          animate={{ scale: 1 }}>
-          <AnimatePresence mode="wait">
-            {isBirthday ? (
-              <BirthdayCelebration key="celebration" />
-            ) : (
-              <Countdown key="countdown" targetDate={birthdayDate} onCountdownEnd={() => setShowForYouBtn(true)} />
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </motion.div>
-
-      {showForYouBtn && <motion.div
-        key="start-button"
-        className="flex flex-col items-center justify-center mt-8"
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0 }}
-      >
-        <motion.button
-          onClick={startCelebration}
-          className="bg-gradient-to-r z-10 from-pink-500 to-purple-500 shadow-lg hover:shadow-xl transition-all rounded-full font-medium text-white py-4 px-8 cursor-pointer border-2 border-white flex items-center gap-3"
-          whileTap={{ scale: 0.95 }}
-          animate={{
-            y: [0, -5, 0],
-            scale: [1, 1.03, 1],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Number.POSITIVE_INFINITY,
-          }}
-        >
-          <PartyPopper className="w-6 h-6" />
-          <span className="text-xl">For you</span>
-          <MoveRight className="w-5 stroke-3 h-6" />
-        </motion.button>
-      </motion.div>}
-
-      {/* You can change the background song if you want */}
-      <audio ref={audioRef} src="/birthday.mp3" preload="auto" loop />
-
-      {/* Decorative elements */}
-      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
-        {bubbles.map((bubble, i) => (
-          <motion.div
-            key={i}
-            className="absolute"
-            style={{ left: bubble.left, top: bubble.top }}
-            animate={{ y: [0, -20, 0], scale: [1, 1.1, 1] }}
-            transition={{
-              duration: bubble.duration,
-              repeat: Infinity,
-              delay: bubble.delay,
-            }}
-          >
-            <div
-              className={`rounded-full ${bubble.color} opacity-60`}
-              style={{ width: `${bubble.size}px`, height: `${bubble.size}px` }}
-            />
-          </motion.div>
-        ))}
+    <main
+      className={`relative min-h-[100dvh] w-full overflow-x-hidden transition-[background] duration-[1200ms] ${ATMOSPHERE_CLASS[atmosphere]}`}
+    >
+      <div className="relative z-10 mx-auto w-full max-w-3xl px-0 sm:px-6">
+        <AnimatePresence mode="wait">
+          {hasOpened ? (
+            <motion.div
+              key="letter"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: reduceMotion ? 0 : 1 }}
+              className="w-full"
+            >
+              <LetterJourney onAtmosphereChange={setAtmosphere} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="countdown"
+              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: reduceMotion ? 0 : 0.9 }}
+              className="flex min-h-[100dvh] flex-col items-center justify-center px-6 py-16"
+            >
+              <Countdown targetDate={BIRTHDAY} isUnlocked={canOpen} onOpen={openLetter} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
+
+      <audio ref={audioRef} src="/birthday.mp3" preload="none" loop />
+
+      {hasOpened && (
+        <button
+          type="button"
+          onClick={() => setIsMuted((m) => !m)}
+          aria-pressed={isMuted}
+          className="fixed bottom-5 right-5 z-30 rounded-full border border-[var(--ink)]/15 bg-white/70 p-3 text-[var(--ink-soft)] backdrop-blur-sm transition-colors hover:text-[var(--ink)]"
+        >
+          {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          <span className="sr-only">{isMuted ? "Unmute music" : "Mute music"}</span>
+        </button>
+      )}
+
+      {/* Ambient bubbles, from the tsparticles bubbles preset. Nothing is
+          rendered at all when the visitor asks for reduced motion. */}
+      {!reduceMotion && (
+        <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden>
+          <ParticlesProvider init={initBubbles}>
+            <Particles id="bubbles" options={BUBBLE_OPTIONS} className="h-full w-full" />
+          </ParticlesProvider>
+        </div>
+      )}
     </main>
   )
 }
+

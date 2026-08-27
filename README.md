@@ -1,87 +1,62 @@
-# Birthday Surprise Website 🎂🎉
+# A letter for Aneeqa
 
-This is a special **Birthday Celebration Website** created using **Next.js, Tailwind CSS, Framer Motion**, and **Lucide Icons**.  
-It's designed as a personal and emotional way to wish someone special — when you can't be there physically, let your code speak! 💖
+A single-page Next.js site: a birthday letter for **30 September 2026**.
 
----
+It is deliberately quiet. It says thank you, admits that she'll be missed,
+wishes her a good life and the right person beside her, and then ends —
+without asking for anything back.
 
-## 🧠 Project Idea
+## Structure
 
-> **POV:** It's her birthday, but you can't meet — so you build something special instead.
+The letter runs as four chapters, one at a time, moving past → present → future.
+Each chapter shifts the background a little lighter than the last.
 
-The website features:
+| Chapter | File | Beat |
+| --- | --- | --- |
+| Waiting | [`countdown.jsx`](src/components/countdown.jsx) | Counts down; unlocks on the day |
+| Opening | [`opening.jsx`](src/components/opening.jsx) | The greeting |
+| Memory | [`memory-trust.jsx`](src/components/memory-trust.jsx) | The photograph, the trust, missing her, acceptance |
+| Wishes | [`wishes.jsx`](src/components/wishes.jsx) | Her happiness, her future, the right partner |
+| Farewell | [`farewell.jsx`](src/components/farewell.jsx) | The parting gift, then goodbye |
 
-- A live countdown timer ⏳
-- Personalized birthday messages 🎈
-- Smooth animations using Framer Motion ✨
-- Cute icons and a heartfelt design 💌
+Everything personal — the name, the date, the photographs — lives in
+[`src/lib/content.js`](src/lib/content.js) so it can never drift out of sync.
 
-This was created as part of an emotional reel where the journey begins with a few lines of code in VS Code and ends with a beautiful surprise on the browser.
+## Adding the other three photos
 
----
+The memory chapter shows the photos as a small stack of prints. Click the front
+one to look through them; the link underneath saves whichever is on top.
 
-## Screenshots:
+`memory.jpg` is already in `/public`. To add the rest, drop them in as
+`memory-2.jpg`, `memory-3.jpg` and `memory-4.jpg` — no code change needed, they
+appear in the deck on their own. Then open
+[`src/lib/content.js`](src/lib/content.js) and replace the placeholder `alt`
+text for each with a real description of what is in that photo.
 
-1. **Loader Page**
-   ![Screenshot 1](./public/ss1.png)
+Until those files exist the deck quietly runs with one card, and the browser
+console logs a failed request for each missing file. That is the mechanism that
+prunes them, and it stops once the files are added.
 
-2. **Countdown Page**
-   ![Screenshot 2](./public/ss2.png)
-
-3. **Happy Birthday Message Screen**
-   ![Screenshot 3](./public/ss3.png)
-
----
-
-## 🛠️ Built With
-
-- [Next.js](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [Lucide Icons](https://lucide.dev/)
-
----
-
-## 🔧 Setup
-
-To run this project locally:
+## Running it
 
 ```bash
-git clone https://github.com/Anuj579/birthday-site.git
-cd birthday-site
 npm install
 npm run dev
 ```
 
-Make sure to update the target date in `Home` component if you want to reuse this.
+The letter is sealed until 30 September 2026. To proof-read it beforehand,
+open `http://localhost:3000/?preview=1`.
 
----
+## Notes
 
-## 🌐 Connect with Me
+- Motion respects `prefers-reduced-motion`: the ambient drift stops and the
+  paced memory chapter renders all at once instead of timing itself out.
+- The memory chapter also has a "Show it all at once" escape hatch for anyone
+  who would rather not wait through the pacing.
+- The page is marked `noindex`. It is not meant to be found.
 
-Follow for more such creative and code-based content!
+The pink bubbles drifting in the background are the
+[tsparticles](https://particles.js.org/) `bubbles` preset, toned right down and
+switched off entirely under reduced motion.
 
-- 📸 **Instagram**: [@anujbuilds](https://instagram.com/anujbuilds)
-- 🎥 **YouTube**: [@anujbuilds](https://youtube.com/@anujbuilds)
-- 🐦 **Twitter/X**: [@anujbuilds](https://twitter.com/anujbuilds)
-- 💼 **LinkedIn**: [Anuj Chaudhary](https://linkedin.com/in/anujchaudhary549)
-
----
-
-Thanks for checking out this project! If you liked it, consider giving it a ⭐️ on GitHub and sharing the reel ❤️
-
----
-
-## ⚠️ License & Usage
-
-### Free Code
-- This free version is strictly for **personal use only**.  
-- You **cannot** post, upload, or share this project online in any form (e.g., Instagram reels, YouTube videos, websites, or any public platform).  
-- Using this free code publicly is **prohibited**.
-- Any violation will be considered **copyright infringement**, and I reserve the right to report it.
-
-### Premium Code
-- You can **buy the premium code** from my store [here](https://www.anujbuilds.in/products/birthday-site)
-- The premium code can be used publicly **only if proper credit is given**:  
-  `Website idea & code by @anujbuilds`  
-- Without credit or without explicit permission, public use is **not allowed**.
+Built with Next.js, Tailwind CSS, framer-motion, tsparticles and Lucide.

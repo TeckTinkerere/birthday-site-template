@@ -2,112 +2,104 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Heart, Gift, Cake, Star } from "lucide-react"
+import useReduceMotion from "@/lib/use-reduce-motion"
+import { BIRTHDAY_LABEL, RECIPIENT } from "@/lib/content"
 
-function calculateTimeLeft(targetDate) {
-  const difference = targetDate - new Date()
-  let timeLeft = {}
+function getTimeLeft(targetDate) {
+  const diff = targetDate.getTime() - Date.now()
+  if (diff <= 0) return null
 
-  if (difference > 0) {
-    timeLeft = {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((difference / 1000 / 60) % 60),
-      seconds: Math.floor((difference / 1000) % 60),
-    }
+  return {
+    days: Math.floor(diff / 86400000),
+    hours: Math.floor((diff / 3600000) % 24),
+    minutes: Math.floor((diff / 60000) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
   }
-
-  return timeLeft
 }
 
-export default function Countdown({ targetDate, onCountdownEnd }) {
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(targetDate))
+export default function Countdown({ targetDate, isUnlocked, onOpen }) {
+  const reduceMotion = useReduceMotion()
+  // Left null on the server so the first client paint matches the markup.
+  const [timeLeft, setTimeLeft] = useState(null)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const updated = calculateTimeLeft(targetDate)
-
-      setTimeLeft(updated)
-      if (!updated || Object.keys(updated).length <= 0) {
-        onCountdownEnd()
-      }
-    }, 1000)
-
-    return () => clearTimeout(timer)
-  }, [timeLeft, targetDate])
-
-  const icons = [
-    <Heart key="heart" className="text-pink-500 fill-pink-200" />,
-    <Gift key="gift" className="text-purple-500" />,
-    <Cake key="cake" className="text-pink-500" />,
-    <Star key="star" className="text-yellow-400 fill-yellow-200" />,
-  ]
+    setTimeLeft(getTimeLeft(targetDate))
+    const timer = setInterval(() => setTimeLeft(getTimeLeft(targetDate)), 1000)
+    return () => clearInterval(timer)
+  }, [targetDate])
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <motion.h1
-        className="text-3xl md:text-4xl font-bold text-center text-pink-600 min-h-20 sm:min-h-11 mb-6"
-        initial={{ scale: 0.95 }}
-        animate={{ scale: 1 }}
-        transition={{
-          duration: 1.5,
-          repeat: Infinity,
-          repeatType: "mirror",
-          ease: "easeInOut",
-        }}
+    <div className="w-full max-w-md text-center">
+      <motion.p
+        className="font-body text-xs uppercase tracking-[0.22em] text-[var(--muted)]"
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
       >
-        Your Special Day is Almost Here💕
+        For {RECIPIENT}
+      </motion.p>
+
+      <motion.h1
+        className="font-display mt-5 text-3xl leading-tight tracking-tight text-[var(--ink)] sm:text-4xl"
+        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: reduceMotion ? 0 : 0.15 }}
+      >
+        {isUnlocked ? "It's the day." : "A letter, waiting."}
       </motion.h1>
 
-      <div className="flex flex-wrap justify-center gap-4 mb-8">
-        {Object.keys(timeLeft).length > 0 ? (
-          Object.entries(timeLeft).map(([unit, value], index) => (
-            <motion.div
-              key={unit}
-              className="bg-white rounded-3xl shadow-lg p-4 w-28 h-28 flex flex-col items-center justify-center border-2 border-pink-200"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              whileHover={{ scale: 1.05, rotate: [-1, 1, -1, 0] }}
-            >
-              <div className="text-3xl font-bold text-purple-600">{value}</div>
-              <div className="text-sm text-pink-500 capitalize">{unit}</div>
-              <div className="mt-1">{icons[index % icons.length]}</div>
-            </motion.div>
-          ))
-        ) : (
-          <p className="text-2xl text-pink-600 font-bold">It's time!</p>
-        )}
-      </div>
-
-      <motion.div
-        className="text-center max-w-md mx-auto bg-pink-50 p-4 rounded-3xl border-2 border-pink-100"
-        initial={{ opacity: 0 }}
+      <motion.p
+        className="font-body mx-auto mt-4 max-w-xs text-base leading-relaxed text-[var(--ink-soft)]"
+        initial={reduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
+        transition={{ duration: 1, delay: reduceMotion ? 0 : 0.35 }}
       >
-        <p className="text-lg text-purple-700 mb-4">
-          Just a little more... A small gift for my favorite person❤️
-        </p>
+        {isUnlocked
+          ? "Whenever you're ready. It's short, and it asks nothing of you."
+          : `It opens on ${BIRTHDAY_LABEL}.`}
+      </motion.p>
 
-        <div className="flex justify-center space-x-2">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <motion.div
-              key={i}
-              className="w-3 h-3 rounded-full bg-pink-400"
-              animate={{
-                scale: [1, 1.5, 1],
-                opacity: [0.7, 1, 0.7],
-              }}
-              transition={{
-                duration: 1,
-                repeat: Number.POSITIVE_INFINITY,
-                delay: i * 0.3,
-              }}
-            />
-          ))}
+      {!isUnlocked && (
+        <div className="mt-10 grid grid-cols-4 gap-2 sm:gap-3" aria-live="off">
+          {timeLeft ? (
+            Object.entries(timeLeft).map(([unit, value], index) => (
+              <motion.div
+                key={unit}
+                className="rounded-2xl border border-white/60 bg-white/55 px-1 py-4 backdrop-blur-sm"
+                initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: reduceMotion ? 0 : index * 0.08 }}
+              >
+                <div className="font-display text-2xl tabular-nums text-[var(--ink)] sm:text-3xl">
+                  {value}
+                </div>
+                <div className="font-body mt-1 text-[0.65rem] uppercase tracking-[0.12em] text-[var(--muted)]">
+                  {unit}
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-4 h-[6.5rem]" />
+          )}
         </div>
-      </motion.div>
+      )}
+
+      {isUnlocked && (
+        <motion.div
+          className="mt-12"
+          initial={reduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, delay: reduceMotion ? 0 : 0.6 }}
+        >
+          <button
+            type="button"
+            onClick={onOpen}
+            className="font-body rounded-full border border-[var(--ink)]/15 bg-white/70 px-8 py-3 text-sm uppercase tracking-[0.14em] text-[var(--ink)] backdrop-blur-sm transition-colors hover:bg-white/90"
+          >
+            Open the letter
+          </button>
+        </motion.div>
+      )}
     </div>
   )
 }

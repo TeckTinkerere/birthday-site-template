@@ -1,26 +1,119 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fbe9ee;
+  --foreground: #3a2630;
+  --ink: #3a2630;
+  --ink-soft: #5a3f4a;
+  --muted: #6b4a58;
+  --accent: #7d3a50;
+  --wish-ink: #3a2630;
+  --wish-ink-soft: #553c48;
+  --wish-muted: #684556;
+  --wish-accent: #b0748c;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-source-serif), Georgia, serif;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Shantell Sans", cursive;
+  font-family: var(--font-body);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* The four moods, in the order the letter moves through them:
+   waiting → nostalgia → hope → closure. Each one is lighter than the last. */
+.atmosphere-celebration {
+  background: linear-gradient(168deg, #fdf1f2 0%, #fbe9ee 52%, #f6e4ec 100%);
+}
+
+.atmosphere-quiet {
+  background: linear-gradient(180deg, #f0d9df 0%, #e6c8d2 42%, #e0c0cb 100%);
+}
+
+.atmosphere-quiet .memory-trust__veil {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 18%, rgba(255, 255, 255, 0.38), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 82%, rgba(140, 80, 105, 0.12), transparent 65%);
+}
+
+.atmosphere-hope {
+  background: linear-gradient(165deg, #fdeef1 0%, #fdf3ec 45%, #f8eaf1 100%);
+}
+
+.atmosphere-hope .wishes__glow {
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(255, 255, 255, 0.72), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 70% 80%, rgba(190, 120, 150, 0.14), transparent 55%);
+}
+
+.atmosphere-light {
+  background: linear-gradient(170deg, #fefaf8 0%, #fdf4f4 45%, #faeff4 100%);
+}
+
+/* The one photograph: a paper frame, so an odd aspect ratio letterboxes
+   onto something that looks deliberate instead of broken. */
+/* Each card in the deck: a paper print. object-contain letterboxes an odd
+   aspect ratio onto the paper instead of cropping anyone's face out. */
+.memory-photo {
+  background: #fffcfd;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 14px 40px rgba(110, 60, 80, 0.22);
+}
+
+/* The deck. Cards sit on top of each other, fanned; the front one is upright.
+   `--i` is the card's depth, set inline from its position in the stack. */
+.memory-deck {
+  position: relative;
+  margin-inline: auto;
+}
+
+.memory-deck__card {
+  position: absolute;
+  inset: 0;
+  transform: rotate(calc(var(--i) * 3.5deg - 2deg)) translate(calc(var(--i) * 7px), calc(var(--i) * -5px));
+  transform-origin: 50% 90%;
+  transition:
+    transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 620ms ease;
+  cursor: pointer;
+}
+
+.memory-deck__card[data-front="true"] {
+  cursor: default;
+}
+
+.memory-deck__card:not([data-front="true"]):hover {
+  transform: rotate(calc(var(--i) * 3.5deg - 2deg)) translate(calc(var(--i) * 7px), calc(var(--i) * -5px - 6px));
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
