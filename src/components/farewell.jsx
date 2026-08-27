@@ -53,7 +53,7 @@ export default function Farewell() {
             className="font-body mt-8 text-pretty text-[1.05rem] leading-relaxed text-[var(--wish-ink-soft)] sm:text-lg"
             initial={reduceMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: delay(0.7 + i * 0.5), ease: [0.22, 1, 0.36, 1] }}
+            transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(0.7 + i * 0.5), }}
           >
             {line}
           </motion.p>
@@ -66,7 +66,7 @@ export default function Farewell() {
               className="font-body text-pretty text-[1.05rem] leading-relaxed text-[var(--wish-ink-soft)] sm:text-lg"
               initial={reduceMotion ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: delay(1.6 + i * 0.6), ease: [0.22, 1, 0.36, 1] }}
+              transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(1.6 + i * 0.6), }}
             >
               {line}
             </motion.p>
@@ -89,7 +89,7 @@ export default function Farewell() {
               className="font-body text-pretty text-[1.05rem] leading-relaxed text-[var(--wish-ink-soft)] sm:text-lg"
               initial={reduceMotion ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: delay(4.4 + i * 0.6), ease: [0.22, 1, 0.36, 1] }}
+              transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(4.4 + i * 0.6), }}
             >
               {line}
             </motion.p>

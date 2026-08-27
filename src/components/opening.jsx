@@ -32,7 +32,7 @@ export default function Opening({ onContinue }) {
           className="font-display mt-6 text-[2rem] leading-tight tracking-tight text-[var(--ink)] sm:text-4xl md:text-[2.75rem]"
           initial={reduceMotion ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: reduceMotion ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ type: "spring", bounce: 0, duration: 1.2, delay: reduceMotion ? 0 : 0.25, }}
         >
           Happy birthday, {RECIPIENT}.
         </motion.h1>
@@ -45,9 +45,7 @@ export default function Opening({ onContinue }) {
               initial={reduceMotion ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
-                duration: 1,
-                delay: reduceMotion ? 0 : 0.9 + i * 0.45,
-                ease: [0.22, 1, 0.36, 1],
+                type: "spring", bounce: 0, duration: 1, delay: reduceMotion ? 0 : 0.9 + i * 0.45,
               }}
             >
               {line}

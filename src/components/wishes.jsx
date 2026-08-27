@@ -58,7 +58,7 @@ export default function Wishes({ onContinue }) {
               className="font-body text-pretty text-[1.05rem] leading-relaxed text-[var(--wish-ink-soft)] sm:text-lg"
               initial={reduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: delay(0.6 + i * 0.5), ease: [0.22, 1, 0.36, 1] }}
+              transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(0.6 + i * 0.5), }}
             >
               {wish}
             </motion.p>
@@ -72,7 +72,7 @@ export default function Wishes({ onContinue }) {
               className="font-body text-pretty text-[1.05rem] leading-relaxed text-[var(--wish-ink-soft)] sm:text-lg"
               initial={reduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: delay(2.3 + i * 0.6), ease: [0.22, 1, 0.36, 1] }}
+              transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(2.3 + i * 0.6), }}
             >
               {line}
             </motion.p>

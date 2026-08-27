@@ -134,7 +134,7 @@ export default function MemoryTrust({ onContinue }) {
             className="font-display mb-10 text-center text-[1.75rem] leading-tight tracking-tight text-[var(--ink)] sm:mb-14 sm:text-4xl md:text-[2.5rem]"
             initial={reduceMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ type: "spring", bounce: 0, duration: 1.2 }}
           >
             Thank you, first.
           </motion.h1>
@@ -145,9 +145,16 @@ export default function MemoryTrust({ onContinue }) {
             <motion.figure
               key="deck"
               className="mx-auto mb-12 w-fit"
-              initial={reduceMotion ? false : { opacity: 0, scale: 0.97 }}
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.94 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: reduceMotion ? 0 : 1.4, ease: "easeInOut" }}
+              // A little bounce here, unlike everywhere else on the page —
+              // this is the one moment something arrives rather than just
+              // fading in, so it's allowed to settle like a real object.
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { type: "spring", bounce: 0.15, duration: 0.9 }
+              }
             >
               <div
                 className="memory-deck aspect-[3/4] w-44 sm:w-52"
@@ -233,8 +240,7 @@ export default function MemoryTrust({ onContinue }) {
                   initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    duration: line.quiet ? 2.2 : 1.3,
-                    ease: [0.22, 1, 0.36, 1],
+                    type: "spring", bounce: 0, duration: line.quiet ? 2.2 : 1.3,
                     delay: still ? Math.min(i * 0.08, 0.5) : 0,
                   }}
                 >
@@ -252,7 +258,7 @@ export default function MemoryTrust({ onContinue }) {
             }`}
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.8, delay: still ? 0 : 1.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ type: "spring", bounce: 0, duration: 1.8, delay: still ? 0 : 1.2, }}
           >
             {FINAL}
           </motion.p>

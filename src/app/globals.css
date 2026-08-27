@@ -83,22 +83,36 @@ body {
 }
 
 .memory-deck__card {
+  --lift: 0px;
+  --press: 1;
   position: absolute;
   inset: 0;
-  transform: rotate(calc(var(--i) * 3.5deg - 2deg)) translate(calc(var(--i) * 7px), calc(var(--i) * -5px));
+  transform: rotate(calc(var(--i) * 3.5deg - 2deg))
+    translate(calc(var(--i) * 7px), calc(var(--i) * -5px + var(--lift)))
+    scale(var(--press));
   transform-origin: 50% 90%;
   transition:
-    transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 620ms ease;
+    transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 500ms ease,
+    box-shadow 500ms ease;
   cursor: pointer;
 }
 
-.memory-deck__card[data-front="true"] {
-  cursor: default;
+.memory-deck__card:not([data-front="true"]):hover {
+  --lift: -6px;
 }
 
-.memory-deck__card:not([data-front="true"]):hover {
-  transform: rotate(calc(var(--i) * 3.5deg - 2deg)) translate(calc(var(--i) * 7px), calc(var(--i) * -5px - 6px));
+/* Feedback lands the instant the card is pressed, before the click even
+   resolves — a physical print would give under a finger immediately. */
+.memory-deck__card:active {
+  --press: 0.97;
+  transition-duration: 90ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memory-deck__card:not([data-front="true"]):hover {
+    --lift: 0px;
+  }
 }
 
 :focus-visible {

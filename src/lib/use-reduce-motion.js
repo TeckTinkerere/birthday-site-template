@@ -14,6 +14,8 @@ export default function useReduceMotion() {
   const prefersReduced = useReducedMotion()
   const [mounted, setMounted] = useState(false)
 
+  // The whole point is to flip *after* the first client paint, once
+  // hydration is safely behind us — so this genuinely can't move into render.
   useEffect(() => setMounted(true), [])
 
   return mounted && Boolean(prefersReduced)

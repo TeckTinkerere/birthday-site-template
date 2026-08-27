@@ -63,7 +63,8 @@ export default function Home() {
   const audioRef = useRef(null)
 
   // The letter unlocks on the day itself. ?preview=1 exists so the letter can
-  // be proof-read beforehand.
+  // be proof-read beforehand. This has to run after mount: the server has no
+  // URL query string and no reliable clock to check against the reader's.
   useEffect(() => {
     const isPreview = new URLSearchParams(window.location.search).has("preview")
     if (isPreview || Date.now() >= BIRTHDAY.getTime()) setCanOpen(true)
