@@ -18,7 +18,7 @@ const body = Source_Serif_4({
 
 export const metadata = {
   title: `For ${RECIPIENT}`,
-  description: "A quiet letter — a memory, a thank you, and good wishes for the years ahead",
+  description: "A quiet letter - a memory, a thank you, and good wishes for the years ahead",
   // A private letter. It should never turn up in a search result.
   robots: { index: false, follow: false },
 }

@@ -12,11 +12,14 @@
     "@tsparticles/engine": "^4.3.2",
     "@tsparticles/preset-bubbles": "^4.3.2",
     "@tsparticles/react": "^4.3.2",
+    "@upstash/redis": "1.38.3",
     "framer-motion": "^12.7.4",
     "lucide-react": "^0.488.0",
     "next": "^15.5.24",
+    "ogl": "1.0.11",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "swiper": "14.2.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

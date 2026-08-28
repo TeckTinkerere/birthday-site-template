@@ -1,7 +1,9 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import useReduceMotion from "@/lib/use-reduce-motion"
+import ChapterLink from "@/components/chapter-link"
 import { RECIPIENT } from "@/lib/content"
 
 const GIFT = [
@@ -10,18 +12,47 @@ const GIFT = [
 
 const CLOSING = [
   "That's the whole letter. I remember it, I'm grateful for it, and I'm not asking for any of it back.",
-  "I hope you're happy — in the ordinary, everyday way that actually lasts.",
+  "I hope you're happy - in the ordinary, everyday way that actually lasts.",
   `Take care of yourself, ${RECIPIENT}.`,
 ]
 
 const EXAMS = [
-  "And good luck with your exams. I know how much work you've put in — I hope it comes back to you when you need it.",
+  "And good luck with your exams. I know how much work you've put in - I hope it comes back to you when you need it.",
   "Go easy on yourself in the middle of it. You're more prepared than you'll feel on the day.",
 ]
 
-export default function Farewell() {
+export default function Farewell({ onContinue, onTrack }) {
   const reduceMotion = useReduceMotion()
-  const delay = (i) => (reduceMotion ? 0 : i)
+  const [staying, setStaying] = useState(false)
+  const [hasReels, setHasReels] = useState(false)
+  const delay = (index) => (reduceMotion ? 0 : index)
+
+  useEffect(() => {
+    let mounted = true
+
+    fetch("/api/videos")
+      .then((response) => (response.ok ? response.json() : { videos: [] }))
+      .then(({ videos }) => {
+        if (mounted) setHasReels(videos.length > 0)
+      })
+      .catch(() => {
+        if (mounted) setHasReels(false)
+      })
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const stay = () => {
+    setStaying(true)
+    onTrack?.({ type: "reels-choice", chapter: "farewell", action: "stay" })
+  }
+
+  const watchReels = () => {
+    onTrack?.({ type: "reels-choice", chapter: "farewell", action: "watch" })
+    onContinue()
+  }
 
   return (
     <section
@@ -47,26 +78,26 @@ export default function Farewell() {
           One last little thing
         </motion.h1>
 
-        {GIFT.map((line, i) => (
+        {GIFT.map((line, index) => (
           <motion.p
             key={line}
             className="font-body mt-8 text-pretty text-[1.05rem] leading-relaxed text-[var(--wish-ink-soft)] sm:text-lg"
             initial={reduceMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(0.7 + i * 0.5), }}
+            transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(0.7 + index * 0.5) }}
           >
             {line}
           </motion.p>
         ))}
 
         <div className="mt-12 space-y-6 border-t border-[var(--wish-accent)]/20 pt-10">
-          {CLOSING.map((line, i) => (
+          {CLOSING.map((line, index) => (
             <motion.p
               key={line}
               className="font-body text-pretty text-[1.05rem] leading-relaxed text-[var(--wish-ink-soft)] sm:text-lg"
               initial={reduceMotion ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(1.6 + i * 0.6), }}
+              transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(1.6 + index * 0.6) }}
             >
               {line}
             </motion.p>
@@ -83,27 +114,39 @@ export default function Farewell() {
         </motion.p>
 
         <div className="mt-12 space-y-5">
-          {EXAMS.map((line, i) => (
+          {EXAMS.map((line, index) => (
             <motion.p
               key={line}
               className="font-body text-pretty text-[1.05rem] leading-relaxed text-[var(--wish-ink-soft)] sm:text-lg"
               initial={reduceMotion ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(4.4 + i * 0.6), }}
+              transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(4.4 + index * 0.6) }}
             >
               {line}
             </motion.p>
           ))}
         </div>
 
-        <motion.p
-          className="font-body mt-12 text-xs uppercase tracking-[0.16em] text-[var(--wish-muted)]"
+        <motion.div
+          className="mt-12"
           initial={reduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: delay(6.2) }}
         >
-          You can close this whenever you like.
-        </motion.p>
+          <p className="font-body text-xs uppercase tracking-[0.16em] text-[var(--wish-muted)]">
+            {staying ? "Take all the time you need." : "You can close this whenever you like."}
+          </p>
+          <div className="mt-6 flex flex-col items-center gap-4">
+            {hasReels && <ChapterLink onClick={watchReels}>Watch a little more</ChapterLink>}
+            <button
+              type="button"
+              onClick={stay}
+              className="font-body text-xs uppercase tracking-[0.14em] text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
+            >
+              Stay with this a little longer
+            </button>
+          </div>
+        </motion.div>
       </div>
     </section>
   )

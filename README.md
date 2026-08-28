@@ -3,12 +3,12 @@
 A single-page Next.js site: a birthday letter for **30 September 2026**.
 
 It is deliberately quiet. It says thank you, admits that she'll be missed,
-wishes her a good life and the right person beside her, and then ends —
+wishes her a good life and the right person beside her, and then ends
 without asking for anything back.
 
 ## Structure
 
-The letter runs as four chapters, one at a time, moving past → present → future.
+The letter runs as five chapters, one at a time, moving from past to present to future.
 Each chapter shifts the background a little lighter than the last.
 
 | Chapter | File | Beat |
@@ -17,25 +17,22 @@ Each chapter shifts the background a little lighter than the last.
 | Opening | [`opening.jsx`](src/components/opening.jsx) | The greeting |
 | Memory | [`memory-trust.jsx`](src/components/memory-trust.jsx) | The photograph, the trust, missing her, acceptance |
 | Wishes | [`wishes.jsx`](src/components/wishes.jsx) | Her happiness, her future, the right partner |
-| Farewell | [`farewell.jsx`](src/components/farewell.jsx) | The parting gift, then goodbye |
+| Farewell | [`farewell.jsx`](src/components/farewell.jsx) | The parting gift and a choice to continue |
+| Reels | [`reel-opener.jsx`](src/components/reel-opener.jsx) | Optional portrait video memories |
 
-Everything personal — the name, the date, the photographs — lives in
+Everything personal, including the name, date, and photographs, lives in
 [`src/lib/content.js`](src/lib/content.js) so it can never drift out of sync.
 
-## Adding the other three photos
+## Adding photos and reels
 
-The memory chapter shows the photos as a small stack of prints. Click the front
-one to look through them; the link underneath saves whichever is on top.
+The memory gallery currently repeats `memory.jpg` and `memory-2.jpg` to create
+four slides. Replace the final two `src` values in
+[`src/lib/content.js`](src/lib/content.js) when new photos are ready.
 
-`memory.jpg` is already in `/public`. To add the rest, drop them in as
-`memory-2.jpg`, `memory-3.jpg` and `memory-4.jpg` — no code change needed, they
-appear in the deck on their own. Then open
-[`src/lib/content.js`](src/lib/content.js) and replace the placeholder `alt`
-text for each with a real description of what is in that photo.
-
-Until those files exist the deck quietly runs with one card, and the browser
-console logs a failed request for each missing file. That is the mechanism that
-prunes them, and it stops once the files are added.
+For the optional reel chapter, add portrait H.264/AAC `.mp4` files or `.webm`
+files to `/public/videos`. Use an ordered filename such as `01-first-reel.mp4`
+to control the horizontal swipe order. New files need a rebuild and redeploy in
+production.
 
 ## Running it
 

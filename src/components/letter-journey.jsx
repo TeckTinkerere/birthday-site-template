@@ -1,38 +1,37 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import useReduceMotion from "@/lib/use-reduce-motion"
 import Opening from "@/components/opening"
 import MemoryTrust from "@/components/memory-trust"
 import Wishes from "@/components/wishes"
 import Farewell from "@/components/farewell"
+import ReelOpener from "@/components/reel-opener"
 
-const CHAPTERS = ["opening", "memory", "wishes", "farewell"]
+const CHAPTERS = ["opening", "memory", "wishes", "farewell", "reels"]
 
 const ATMOSPHERE = {
   opening: "celebration",
   memory: "quiet",
   wishes: "hope",
   farewell: "light",
+  reels: "hope",
 }
 
-/**
- * The letter, in order:
- * greeting → memory and trust → acceptance → wishes → parting gift → goodbye
- */
-export default function LetterJourney({ onAtmosphereChange }) {
+export default function LetterJourney({ onAtmosphereChange, onTrack }) {
   const reduceMotion = useReduceMotion()
   const [chapter, setChapter] = useState("opening")
 
   useEffect(() => {
     onAtmosphereChange?.(ATMOSPHERE[chapter])
+    onTrack?.({ type: "chapter", chapter })
     window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" })
-  }, [chapter, onAtmosphereChange, reduceMotion])
+  }, [chapter, onAtmosphereChange, onTrack, reduceMotion])
 
   const next = () => {
-    const i = CHAPTERS.indexOf(chapter)
-    if (i < CHAPTERS.length - 1) setChapter(CHAPTERS[i + 1])
+    const index = CHAPTERS.indexOf(chapter)
+    if (index < CHAPTERS.length - 1) setChapter(CHAPTERS[index + 1])
   }
 
   return (
@@ -48,7 +47,8 @@ export default function LetterJourney({ onAtmosphereChange }) {
           {chapter === "opening" && <Opening onContinue={next} />}
           {chapter === "memory" && <MemoryTrust onContinue={next} />}
           {chapter === "wishes" && <Wishes onContinue={next} />}
-          {chapter === "farewell" && <Farewell />}
+          {chapter === "farewell" && <Farewell onContinue={next} onTrack={onTrack} />}
+          {chapter === "reels" && <ReelOpener />}
         </motion.div>
       </AnimatePresence>
     </div>

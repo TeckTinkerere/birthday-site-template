@@ -1,17 +1,16 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import useReduceMotion from "@/lib/use-reduce-motion"
 import ChapterLink from "@/components/chapter-link"
+import CircularGallery from "@/components/circular-gallery"
 import { MEMORY_PHOTOS, MEMORY_PHOTO_CAPTION } from "@/lib/content"
 
-/** dwell = how long this line sits alone before the next one arrives. */
 const LINES = [
   { text: "You knew a side of me that very few people ever did.", dwell: 3600, quiet: true },
   {
-    text: "I trusted you with things I rarely let anyone see — some of my worst days. That was never easy for me, and I don't think I ever properly thanked you for it.",
+    text: "I trusted you with things I rarely let anyone see - some of my worst days. That was never easy for me, and I don't think I ever properly thanked you for it.",
     dwell: 5400,
     quiet: true,
   },
@@ -28,71 +27,52 @@ const LINES = [
 ]
 
 const FINAL = "And I'm learning to be okay with that."
-
 const PHASE = { QUIET: 0, TITLE: 1, PAUSE: 2, PHOTO: 3, LINES: 4, FINAL: 5, DONE: 6 }
-
-/** The filename, so a saved copy isn't called something like "memory-2". */
-function downloadName(src) {
-  return `aneeqa-${src.replace(/^\//, "")}`
-}
 
 export default function MemoryTrust({ onContinue }) {
   const reduceMotion = useReduceMotion()
   const [phase, setPhase] = useState(PHASE.QUIET)
   const [lineIndex, setLineIndex] = useState(-1)
   const [showAll, setShowAll] = useState(false)
-
-  // Deck order, front of the stack first.
-  const [order, setOrder] = useState(() => MEMORY_PHOTOS.map((p) => p.src))
-  // Files that aren't there yet simply leave the deck instead of showing a
-  // broken image, so content.js can list photos before they've been added.
-  const [missing, setMissing] = useState([])
-
-  const cards = useMemo(
-    () =>
-      order
-        .filter((src) => !missing.includes(src))
-        .map((src) => MEMORY_PHOTOS.find((p) => p.src === src))
-        .filter(Boolean),
-    [order, missing],
+  const still = reduceMotion || showAll
+  const galleryItems = useMemo(
+    () => MEMORY_PHOTOS.map((photo) => ({ image: photo.src, text: photo.text, description: photo.alt })),
+    [],
   )
 
-  const front = cards[0]
-  const still = reduceMotion || showAll
-
   useEffect(() => {
-    if (still) return
+    if (still) return undefined
 
     const timers = []
-    const at = (ms, fn) => timers.push(setTimeout(fn, ms))
+    const at = (ms, callback) => timers.push(setTimeout(callback, ms))
 
     at(700, () => setPhase(PHASE.TITLE))
     at(2800, () => setPhase(PHASE.PAUSE))
     at(4200, () => setPhase(PHASE.PHOTO))
-    at(MEMORY_PHOTOS.length ? 8200 : 5600, () => {
+    at(galleryItems.length ? 8200 : 5600, () => {
       setPhase(PHASE.LINES)
       setLineIndex(0)
     })
 
     return () => timers.forEach(clearTimeout)
-  }, [still])
+  }, [galleryItems.length, still])
 
   useEffect(() => {
-    if (still || phase !== PHASE.LINES || lineIndex < 0) return
+    if (still || phase !== PHASE.LINES || lineIndex < 0) return undefined
 
     if (lineIndex >= LINES.length - 1) {
-      const t = setTimeout(() => setPhase(PHASE.FINAL), LINES[LINES.length - 1].dwell)
-      return () => clearTimeout(t)
+      const timer = setTimeout(() => setPhase(PHASE.FINAL), LINES[LINES.length - 1].dwell)
+      return () => clearTimeout(timer)
     }
 
-    const t = setTimeout(() => setLineIndex((i) => i + 1), LINES[lineIndex].dwell)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setLineIndex((index) => index + 1), LINES[lineIndex].dwell)
+    return () => clearTimeout(timer)
   }, [phase, lineIndex, still])
 
   useEffect(() => {
-    if (still || phase !== PHASE.FINAL) return
-    const t = setTimeout(() => setPhase(PHASE.DONE), 3200)
-    return () => clearTimeout(t)
+    if (still || phase !== PHASE.FINAL) return undefined
+    const timer = setTimeout(() => setPhase(PHASE.DONE), 3200)
+    return () => clearTimeout(timer)
   }, [phase, still])
 
   const revealAll = () => {
@@ -101,16 +81,9 @@ export default function MemoryTrust({ onContinue }) {
     setPhase(PHASE.DONE)
   }
 
-  /** Front card goes to the back; any other card comes to the front. */
-  const flip = (src) =>
-    setOrder((prev) =>
-      prev[0] === src ? [...prev.slice(1), prev[0]] : [src, ...prev.filter((s) => s !== src)],
-    )
-
   const showTitle = still || phase >= PHASE.TITLE
-  const showDeck = cards.length > 0 && (still || phase >= PHASE.PHOTO)
+  const showGallery = galleryItems.length > 0 && (still || phase >= PHASE.PHOTO)
   const showFinal = still || phase >= PHASE.FINAL
-  // In the paced reading the earlier lines step back so the last sentence stands alone.
   const linesVisible = still || phase <= PHASE.LINES
   const visibleLines = still ? LINES : LINES.slice(0, Math.max(0, lineIndex + 1))
   const sequenceRunning = !still && phase < PHASE.DONE
@@ -128,7 +101,7 @@ export default function MemoryTrust({ onContinue }) {
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-xl">
+      <div className="relative z-10 mx-auto w-full max-w-4xl">
         {showTitle && (
           <motion.h1
             className="font-display mb-10 text-center text-[1.75rem] leading-tight tracking-tight text-[var(--ink)] sm:mb-14 sm:text-4xl md:text-[2.5rem]"
@@ -141,85 +114,32 @@ export default function MemoryTrust({ onContinue }) {
         )}
 
         <AnimatePresence>
-          {showDeck && (
+          {showGallery && (
             <motion.figure
-              key="deck"
-              className="mx-auto mb-12 w-fit"
-              initial={reduceMotion ? false : { opacity: 0, scale: 0.94 }}
+              key="gallery"
+              className="mx-auto mb-12"
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              // A little bounce here, unlike everywhere else on the page —
-              // this is the one moment something arrives rather than just
-              // fading in, so it's allowed to settle like a real object.
-              transition={
-                reduceMotion
-                  ? { duration: 0 }
-                  : { type: "spring", bounce: 0.15, duration: 0.9 }
-              }
+              transition={reduceMotion ? { duration: 0 } : { type: "spring", bounce: 0.12, duration: 0.9 }}
             >
-              <div
-                className="memory-deck aspect-[3/4] w-44 sm:w-52"
-                role="group"
-                aria-label={`${cards.length} photograph${cards.length === 1 ? "" : "s"}`}
-                style={{ marginRight: `${(cards.length - 1) * 7}px` }}
-              >
-                {/* Painted back to front so the deck stacks without fighting z-index. */}
-                {cards
-                  .map((photo, i) => ({ photo, i }))
-                  .reverse()
-                  .map(({ photo, i }) => (
-                    <button
-                      key={photo.src}
-                      type="button"
-                      onClick={() => flip(photo.src)}
-                      data-front={i === 0}
-                      className="memory-deck__card memory-photo rounded-sm p-2"
-                      style={{ "--i": i, zIndex: cards.length - i }}
-                      aria-label={
-                        i === 0
-                          ? `Photograph 1 of ${cards.length}. Show the next one.`
-                          : `Bring photograph ${i + 1} of ${cards.length} to the front.`
-                      }
-                    >
-                      <span className="relative block h-full w-full">
-                        <Image
-                          src={photo.src}
-                          alt={i === 0 ? photo.alt : ""}
-                          fill
-                          sizes="(max-width: 640px) 176px, 208px"
-                          // Eager: they're four small prints, and a lazy image
-                          // that never enters the viewport never fires onError,
-                          // which is what prunes photos that aren't there yet.
-                          loading="eager"
-                          className="object-contain"
-                          onError={() =>
-                            setMissing((m) => (m.includes(photo.src) ? m : [...m, photo.src]))
-                          }
-                        />
-                      </span>
-                    </button>
-                  ))}
+              <div className="mx-auto h-[340px] w-full max-w-3xl sm:h-[420px] md:h-[480px]">
+                <CircularGallery
+                  items={galleryItems}
+                  bend={3}
+                  textColor="#7d3a50"
+                  borderRadius={0.045}
+                  scrollSpeed={2}
+                  scrollEase={0.02}
+                  autoScrollSpeed={reduceMotion ? 0 : 0.018}
+                  font="600 20px Georgia"
+                />
               </div>
-
               <figcaption className="font-body mt-4 text-center text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
                 {MEMORY_PHOTO_CAPTION}
               </figcaption>
-
-              <div className="mt-3 flex flex-col items-center gap-1">
-                {cards.length > 1 && (
-                  <p className="font-body text-[0.7rem] uppercase tracking-[0.14em] text-[var(--muted)]">
-                    Tap to look through them
-                  </p>
-                )}
-                {front && (
-                  <a
-                    href={front.src}
-                    download={downloadName(front.src)}
-                    className="font-body border-b border-[var(--accent)]/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.14em] text-[var(--accent)] transition-colors hover:border-[var(--accent)]"
-                  >
-                    Yours to keep — save this one
-                  </a>
-                )}
-              </div>
+              <p className="font-body mt-2 text-center text-[0.7rem] uppercase tracking-[0.14em] text-[var(--muted)]">
+                Drag, scroll, or use the arrow keys
+              </p>
             </motion.figure>
           )}
         </AnimatePresence>
@@ -228,10 +148,10 @@ export default function MemoryTrust({ onContinue }) {
           {linesVisible && (
             <motion.div
               key="lines"
-              className="space-y-6 sm:space-y-7"
+              className="mx-auto max-w-xl space-y-6 sm:space-y-7"
               exit={{ opacity: 0, transition: { duration: 1.4, ease: "easeInOut" } }}
             >
-              {visibleLines.map((line, i) => (
+              {visibleLines.map((line, index) => (
                 <motion.p
                   key={line.text}
                   className={`font-body text-pretty text-[1.05rem] leading-relaxed sm:text-lg ${
@@ -240,8 +160,10 @@ export default function MemoryTrust({ onContinue }) {
                   initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    type: "spring", bounce: 0, duration: line.quiet ? 2.2 : 1.3,
-                    delay: still ? Math.min(i * 0.08, 0.5) : 0,
+                    type: "spring",
+                    bounce: 0,
+                    duration: line.quiet ? 2.2 : 1.3,
+                    delay: still ? Math.min(index * 0.08, 0.5) : 0,
                   }}
                 >
                   {line.text}
@@ -258,24 +180,16 @@ export default function MemoryTrust({ onContinue }) {
             }`}
             initial={reduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", bounce: 0, duration: 1.8, delay: still ? 0 : 1.2, }}
+            transition={{ type: "spring", bounce: 0, duration: 1.8, delay: still ? 0 : 1.2 }}
           >
             {FINAL}
           </motion.p>
         )}
 
-        <div className="mt-14 flex flex-col items-center gap-6">
-          {(still || phase >= PHASE.DONE) && (
-            <motion.div
-              initial={reduceMotion ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: reduceMotion ? 0 : 0.4 }}
-            >
-              <ChapterLink onClick={onContinue}>What I wish for you</ChapterLink>
-            </motion.div>
-          )}
-
-          {sequenceRunning && (
+        <div className="mt-14 flex flex-col items-center gap-8">
+          {phase === PHASE.DONE || still ? (
+            <ChapterLink onClick={onContinue}>Keep reading</ChapterLink>
+          ) : (
             <button
               type="button"
               onClick={revealAll}
@@ -284,6 +198,7 @@ export default function MemoryTrust({ onContinue }) {
               Show it all at once
             </button>
           )}
+          {sequenceRunning && null}
         </div>
       </div>
     </section>

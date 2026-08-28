@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "swiper/css";
+@import "swiper/css/pagination";
 
 :root {
   --background: #fbe9ee;
@@ -38,11 +40,11 @@ body {
 /* The four moods, in the order the letter moves through them:
    waiting → nostalgia → hope → closure. Each one is lighter than the last. */
 .atmosphere-celebration {
-  background: linear-gradient(168deg, #fdf1f2 0%, #fbe9ee 52%, #f6e4ec 100%);
+  background: linear-gradient(168deg, rgba(253, 241, 242, 0.72) 0%, rgba(251, 233, 238, 0.7) 52%, rgba(246, 228, 236, 0.72) 100%);
 }
 
 .atmosphere-quiet {
-  background: linear-gradient(180deg, #f0d9df 0%, #e6c8d2 42%, #e0c0cb 100%);
+  background: linear-gradient(180deg, rgba(240, 217, 223, 0.8) 0%, rgba(230, 200, 210, 0.78) 42%, rgba(224, 192, 203, 0.8) 100%);
 }
 
 .atmosphere-quiet .memory-trust__veil {
@@ -52,7 +54,7 @@ body {
 }
 
 .atmosphere-hope {
-  background: linear-gradient(165deg, #fdeef1 0%, #fdf3ec 45%, #f8eaf1 100%);
+  background: linear-gradient(165deg, rgba(253, 238, 241, 0.72) 0%, rgba(253, 243, 236, 0.7) 45%, rgba(248, 234, 241, 0.72) 100%);
 }
 
 .atmosphere-hope .wishes__glow {
@@ -62,57 +64,53 @@ body {
 }
 
 .atmosphere-light {
-  background: linear-gradient(170deg, #fefaf8 0%, #fdf4f4 45%, #faeff4 100%);
+  background: linear-gradient(170deg, rgba(254, 250, 248, 0.74) 0%, rgba(253, 244, 244, 0.72) 45%, rgba(250, 239, 244, 0.74) 100%);
 }
 
-/* The one photograph: a paper frame, so an odd aspect ratio letterboxes
-   onto something that looks deliberate instead of broken. */
-/* Each card in the deck: a paper print. object-contain letterboxes an odd
-   aspect ratio onto the paper instead of cropping anyone's face out. */
-.memory-photo {
-  background: #fffcfd;
+.reel-swiper {
+  width: 100%;
+  padding: 8px 0 42px;
+}
+
+.reel-swiper__slide {
+  width: min(76vw, 286px);
+}
+
+.reel-card {
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 14px 40px rgba(110, 60, 80, 0.22);
+  border-radius: 2rem;
+  background: rgba(255, 252, 253, 0.84);
+  box-shadow: 0 20px 54px rgba(123, 58, 80, 0.2);
 }
 
-/* The deck. Cards sit on top of each other, fanned; the front one is upright.
-   `--i` is the card's depth, set inline from its position in the stack. */
-.memory-deck {
-  position: relative;
-  margin-inline: auto;
+.reel-card__video {
+  display: block;
+  aspect-ratio: 9 / 16;
+  width: 100%;
+  background: #3a2630;
+  object-fit: cover;
 }
 
-.memory-deck__card {
-  --lift: 0px;
-  --press: 1;
-  position: absolute;
-  inset: 0;
-  transform: rotate(calc(var(--i) * 3.5deg - 2deg))
-    translate(calc(var(--i) * 7px), calc(var(--i) * -5px + var(--lift)))
-    scale(var(--press));
-  transform-origin: 50% 90%;
-  transition:
-    transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 500ms ease,
-    box-shadow 500ms ease;
-  cursor: pointer;
+.reel-card__label {
+  padding: 0.8rem 1rem 0.9rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wish-muted);
 }
 
-.memory-deck__card:not([data-front="true"]):hover {
-  --lift: -6px;
+.reel-swiper .swiper-pagination-bullet {
+  width: 6px;
+  height: 6px;
+  background: var(--wish-accent);
+  opacity: 0.35;
 }
 
-/* Feedback lands the instant the card is pressed, before the click even
-   resolves — a physical print would give under a finger immediately. */
-.memory-deck__card:active {
-  --press: 0.97;
-  transition-duration: 90ms;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .memory-deck__card:not([data-front="true"]):hover {
-    --lift: 0px;
-  }
+.reel-swiper .swiper-pagination-bullet-active {
+  width: 18px;
+  border-radius: 99px;
+  opacity: 0.9;
 }
 
 :focus-visible {
@@ -129,5 +127,472 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Animated gradient ground (adapted from Aceternity's BackgroundGradientAnimation)
+
+   Repainted from the original purple/navy to pink and pale blue. The blobs are
+   pastel and blended with `multiply` rather than `hard-light`: on a light
+   ground hard-light blows the colours out to white, while multiply tints and
+   leaves intact the text contrast the palette was tuned for.
+--------------------------------------------------------------------------- */
+.gradient-bg {
+  --gradient-start: #fdeef4;
+  --gradient-end: #e7f1fb;
+  --blob-size: 80%;
+  --first-color: 244, 164, 194;
+  --second-color: 255, 190, 215;
+  --third-color: 150, 205, 240;
+  --fourth-color: 250, 185, 205;
+  --fifth-color: 180, 218, 245;
+  --pointer-color: 245, 175, 205;
+
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(40deg, var(--gradient-start), var(--gradient-end));
+}
+
+.gradients-container {
+  height: 100%;
+  width: 100%;
+  filter: url(#blurMe) blur(40px);
+}
+
+/* Safari renders the SVG goo filter far too slowly at full-screen size. */
+.gradients-container.is-safari {
+  filter: blur(60px);
+}
+
+.gradient-bg .g {
+  position: absolute;
+  width: var(--blob-size);
+  height: var(--blob-size);
+  top: calc(50% - var(--blob-size) / 2);
+  left: calc(50% - var(--blob-size) / 2);
+  mix-blend-mode: multiply;
+  transform-origin: center center;
+}
+
+.gradient-bg .g-first {
+  background: radial-gradient(
+      circle at center,
+      rgba(var(--first-color), 0.8) 0,
+      rgba(var(--first-color), 0) 50%
+    )
+    no-repeat;
+  animation: blob-vertical 30s ease infinite;
+}
+
+.gradient-bg .g-second {
+  background: radial-gradient(
+      circle at center,
+      rgba(var(--second-color), 0.8) 0,
+      rgba(var(--second-color), 0) 50%
+    )
+    no-repeat;
+  transform-origin: calc(50% - 400px);
+  animation: blob-circle 20s reverse infinite;
+}
+
+.gradient-bg .g-third {
+  background: radial-gradient(
+      circle at center,
+      rgba(var(--third-color), 0.8) 0,
+      rgba(var(--third-color), 0) 50%
+    )
+    no-repeat;
+  transform-origin: calc(50% + 400px);
+  animation: blob-circle 40s linear infinite;
+}
+
+.gradient-bg .g-fourth {
+  background: radial-gradient(
+      circle at center,
+      rgba(var(--fourth-color), 0.8) 0,
+      rgba(var(--fourth-color), 0) 50%
+    )
+    no-repeat;
+  transform-origin: calc(50% - 200px);
+  opacity: 0.7;
+  animation: blob-horizontal 40s ease infinite;
+}
+
+.gradient-bg .g-fifth {
+  background: radial-gradient(
+      circle at center,
+      rgba(var(--fifth-color), 0.8) 0,
+      rgba(var(--fifth-color), 0) 50%
+    )
+    no-repeat;
+  transform-origin: calc(50% - 800px) calc(50% + 800px);
+  animation: blob-circle 20s ease infinite;
+}
+
+.gradient-bg .g-pointer {
+  width: 100%;
+  height: 100%;
+  top: -50%;
+  left: -50%;
+  opacity: 0.7;
+  background: radial-gradient(
+      circle at center,
+      rgba(var(--pointer-color), 0.8) 0,
+      rgba(var(--pointer-color), 0) 50%
+    )
+    no-repeat;
+}
+
+@keyframes blob-vertical {
+  0% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes blob-horizontal {
+  0% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+  50% {
+    transform: translateX(50%) translateY(10%);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+}
+
+@keyframes blob-circle {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Analogue clock (adapted from Uiverse.io by david-mohseni)
+
+   Geometry is calibrated against a 180px face, so smaller screens scale the
+   whole face rather than moving any of the parts. The outline and second hand
+   are pulled from neutral #333/red toward the letter's ink and rose.
+--------------------------------------------------------------------------- */
+.clock-wrap {
+  display: grid;
+  place-items: center;
+  width: 164px;
+  height: 164px;
+}
+
+.clock-wrap .face {
+  transform: scale(0.8);
+}
+
+@media (min-width: 640px) {
+  .clock-wrap {
+    width: 204px;
+    height: 204px;
+  }
+  .clock-wrap .face {
+    transform: scale(1);
+  }
+}
+
+.face {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  outline: 10px solid #4a3540;
+  background:
+    repeating-radial-gradient(
+      circle at 50% 50%,
+      rgba(200, 200, 200, 0.2) 0%,
+      rgba(200, 200, 200, 0.2) 2%,
+      transparent 2%,
+      transparent 3%,
+      rgba(200, 200, 200, 0.2) 3%,
+      transparent 3%
+    ),
+    conic-gradient(
+      white 0%,
+      #ded3d8 10%,
+      white 35%,
+      #ded3d8 45%,
+      white 60%,
+      #ded3d8 70%,
+      white 80%,
+      #ded3d8 95%,
+      white 100%
+    );
+  box-shadow:
+    inset 0 0 20px #0007,
+    0 18px 40px -18px rgba(110, 60, 80, 0.55);
+}
+
+.hour {
+  position: absolute;
+  width: 5px;
+  height: 60px;
+  background: #aaa;
+  left: 87.5px;
+  top: 43px;
+  border-radius: 3px 3px 1px 1px;
+  transform-origin: 2px 47px;
+  box-shadow:
+    0 0 5px #0005,
+    inset 1.5px 3px 0px #4a3540,
+    inset -1.5px -3px 0px #4a3540;
+  z-index: 1;
+  animation: watch 43200s linear infinite;
+}
+
+.minute {
+  position: absolute;
+  width: 4px;
+  height: 78px;
+  background: #aaa;
+  left: 88px;
+  top: 25px;
+  border-radius: 3px 3px 1px 1px;
+  transform-origin: 2px 65px;
+  box-shadow:
+    0 0 5px #0005,
+    inset 1.5px 3px 0px #4a3540,
+    inset -1.5px -3px 0px #4a3540;
+  z-index: 2;
+  animation: watch 3600s linear infinite;
+}
+
+.second {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #c0405f;
+  left: 85px;
+  top: 85px;
+  border-radius: 50%;
+  border: 1px solid #eee;
+  z-index: 3;
+  animation: watch 60s steps(60, end) 0s infinite;
+}
+
+.second::before {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 85px;
+  left: 3px;
+  bottom: -10px;
+  background: #c0405f;
+  border-radius: 2px;
+  box-shadow: 5px 0 2px rgba(128, 128, 128, 0.2);
+}
+
+.second::after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  left: 2px;
+  top: 2px;
+  background: #555;
+  border-radius: 50%;
+}
+
+/* One element per axis: the text-shadow paints the opposite index, so a bar
+   glyph gives all four markers from two nodes. */
+.v-index {
+  position: absolute;
+  color: #4a3540;
+  font-size: 24px;
+  left: 83.5px;
+  top: -3px;
+  text-shadow: 0 157px 0 #4a3540;
+  z-index: 1;
+}
+
+.h-index {
+  position: absolute;
+  color: #4a3540;
+  font-size: 24px;
+  top: 72px;
+  left: 5px;
+  transform: rotate(-90deg);
+  text-shadow: 0 158px 0 #4a3540;
+  z-index: 1;
+}
+
+@keyframes watch {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Opening loader (adapted from Uiverse.io by dexter-st)
+
+   Sized mobile-first: the upstream `scale: 2` at 1.6em overflows a 375px
+   screen, so the base size is small and grows at the breakpoints. The sweep
+   is repainted from rainbow to the site's pink and blue.
+--------------------------------------------------------------------------- */
+.loader-screen {
+  background: linear-gradient(160deg, #3b2230 0%, #58283c 45%, #33202d 100%);
+}
+
+.loader-apology {
+  font-family: var(--font-body);
+  color: rgba(255, 236, 244, 0.72);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.25rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .loader-apology {
+    font-size: 1.1rem;
+  }
+}
+
+.loader-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 84px;
+  width: auto;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 600;
+  user-select: none;
+  color: #fff;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .loader-wrapper {
+    height: 104px;
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .loader-wrapper {
+    height: 120px;
+    font-size: 1.9rem;
+  }
+}
+
+.loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  background-color: transparent;
+  mask: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 6px,
+    black 7px,
+    black 8px
+  );
+}
+
+.loader::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(circle at 50% 50%, #ffd9e6 0%, transparent 50%),
+    radial-gradient(circle at 45% 45%, #ff7fa8 0%, transparent 45%),
+    radial-gradient(circle at 55% 55%, #7fd4ff 0%, transparent 45%),
+    radial-gradient(circle at 45% 55%, #ffa6c4 0%, transparent 45%),
+    radial-gradient(circle at 55% 45%, #a8c8ff 0%, transparent 45%);
+  mask: radial-gradient(circle at 50% 50%, transparent 0%, transparent 10%, black 25%);
+  animation:
+    transform-animation 2s infinite alternate,
+    opacity-animation 4s infinite;
+  animation-timing-function: cubic-bezier(0.6, 0.8, 0.5, 1);
+}
+
+@keyframes transform-animation {
+  0% {
+    transform: translate(-55%);
+  }
+  100% {
+    transform: translate(55%);
+  }
+}
+
+@keyframes opacity-animation {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  65% {
+    opacity: 0;
+  }
+}
+
+.loader-letter {
+  display: inline-block;
+  opacity: 0;
+  animation: loader-letter-anim 4s infinite linear;
+  z-index: 2;
+}
+
+@keyframes loader-letter-anim {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+    text-shadow: 0 0 4px #fff;
+    transform: scale(1.1) translateY(-2px);
+  }
+  20% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The blanket reduced-motion rule above collapses every animation to 0.01ms.
+   For the loader that would leave the letters stuck at their opacity: 0 start
+   frame, so they are pinned visible and the colour sweep is dropped instead. */
+@media (prefers-reduced-motion: reduce) {
+  .loader-letter {
+    opacity: 1;
+    animation: none;
+  }
+
+  .loader::after {
+    display: none;
   }
 }

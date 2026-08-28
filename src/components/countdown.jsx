@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import useReduceMotion from "@/lib/use-reduce-motion"
+import AnalogClock from "@/components/analog-clock"
 import { BIRTHDAY_LABEL, RECIPIENT } from "@/lib/content"
 
 function getTimeLeft(targetDate) {
@@ -62,7 +63,22 @@ export default function Countdown({ targetDate, isUnlocked, onOpen }) {
       </motion.p>
 
       {!isUnlocked && (
-        <div className="mt-10 grid grid-cols-4 gap-2 sm:gap-3" aria-live="off">
+        <motion.div
+          className="mt-10 flex justify-center"
+          initial={reduceMotion ? false : { opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          // A real object arriving, so it settles rather than just fading -
+          // the same allowance the photo deck gets.
+          transition={
+            reduceMotion ? { duration: 0 } : { type: "spring", bounce: 0.18, duration: 1 }
+          }
+        >
+          <AnalogClock />
+        </motion.div>
+      )}
+
+      {!isUnlocked && (
+        <div className="mt-8 grid grid-cols-4 gap-2 sm:gap-3" aria-live="off">
           {timeLeft ? (
             Object.entries(timeLeft).map(([unit, value], index) => (
               <motion.div

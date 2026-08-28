@@ -11,7 +11,7 @@ const WISHES = [
 ]
 
 const FOR_SOMEONE = [
-  "And I hope you meet the person who is genuinely right for you — someone who sees you clearly, understands you without needing it explained, and is steady about it.",
+  "And I hope you meet the person who is genuinely right for you - someone who sees you clearly, understands you without needing it explained, and is steady about it.",
   "I hope being loved by them feels easy. You deserve that, plainly and without conditions.",
 ]
 
