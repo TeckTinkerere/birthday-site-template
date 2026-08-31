@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import useReduceMotion from "@/lib/use-reduce-motion"
-import ChapterLink from "@/components/chapter-link"
 import { RECIPIENT } from "@/lib/content"
 
 const GIFT = [
@@ -50,7 +49,7 @@ export default function Farewell({ onContinue, onTrack }) {
   }
 
   const watchReels = () => {
-    onTrack?.({ type: "reels-choice", chapter: "farewell", action: "watch" })
+    onTrack?.({ type: "reels-button", chapter: "farewell" })
     onContinue()
   }
 
@@ -137,7 +136,6 @@ export default function Farewell({ onContinue, onTrack }) {
             {staying ? "Take all the time you need." : "You can close this whenever you like."}
           </p>
           <div className="mt-6 flex flex-col items-center gap-4">
-            {hasReels && <ChapterLink onClick={watchReels}>Watch a little more</ChapterLink>}
             <button
               type="button"
               onClick={stay}
@@ -148,6 +146,17 @@ export default function Farewell({ onContinue, onTrack }) {
           </div>
         </motion.div>
       </div>
+
+      {hasReels && (
+        <button
+          type="button"
+          onClick={watchReels}
+          aria-label="Watch a few moments in motion"
+          className="font-body fixed bottom-6 left-1/2 z-20 -translate-x-1/2 rounded-full border border-[var(--wish-accent)]/40 bg-[var(--wish-ink)]/5 px-5 py-2 text-xs uppercase tracking-[0.16em] text-[var(--wish-accent)] backdrop-blur-sm transition-colors hover:border-[var(--wish-accent)] hover:text-[var(--wish-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--wish-accent)]"
+        >
+          Watch a little more
+        </button>
+      )}
     </section>
   )
 }

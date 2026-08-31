@@ -1,0 +1,212 @@
+/* ---------------------------------------------------------------------------
+   Reel scroller
+
+   A full-screen, vertical, auto-advancing video feed styled after Instagram
+   Reels. Native CSS scroll-snap settles on one portrait reel per screen. Once
+   every reel has played, a fire "burn" animation rises over the feed and fades
+   to black, resolving on a quiet closing screen. Colours are pulled from the
+   letter's ink palette so the ending stays in tone.
+--------------------------------------------------------------------------- */
+
+.scroller {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  height: 100dvh;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+  background: #16090f;
+  overscroll-behavior: contain;
+}
+
+/* One portrait reel per full screen height. 100dvh tracks the dynamic viewport
+   so the mobile URL bar does not leave a gap under the slide. */
+.slide {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background: #16090f;
+}
+
+.video {
+  display: block;
+  height: 100%;
+  width: 100%;
+  max-height: 100dvh;
+  object-fit: contain;
+  background: #16090f;
+}
+
+/* Playback bar, pinned near the bottom of the active slide. The native range
+   input is restyled into a thin rose track for the light letter palette. */
+.playbackBar {
+  position: absolute;
+  bottom: max(1.4rem, env(safe-area-inset-bottom));
+  left: 50%;
+  z-index: 2;
+  width: min(88%, 30rem);
+  transform: translateX(-50%);
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.28);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.playbackBar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  border: none;
+  background: var(--wish-accent);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.playbackBar::-moz-range-thumb {
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  border: none;
+  background: var(--wish-accent);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.playbackBar:focus-visible {
+  outline: 2px solid var(--wish-accent);
+  outline-offset: 6px;
+}
+
+/* Calm, non-fatal states. Neither shows the entry into the burn. */
+.message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  width: 100%;
+  padding: 2rem;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  text-align: center;
+  color: rgba(255, 236, 244, 0.82);
+  background: #16090f;
+}
+
+/* ---------------------------------------------------------------------------
+   Burn overlay
+
+   A fire gradient rises from the base of the screen, consumes the feed, and
+   settles into black. The keyframes drive both the rise (transform) and the
+   fade to black (opacity/background), so animationend marks the transition to
+   the closing screen. Skipped entirely under reduced motion.
+--------------------------------------------------------------------------- */
+.burn {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  overflow: hidden;
+  background: transparent;
+  animation: burn-blacken 2600ms ease-in forwards;
+}
+
+.burnFlames {
+  position: absolute;
+  inset: 0;
+  transform: translateY(100%);
+  background:
+    radial-gradient(ellipse 70% 55% at 30% 108%, rgba(255, 214, 120, 0.95), transparent 60%),
+    radial-gradient(ellipse 60% 60% at 70% 112%, rgba(255, 138, 46, 0.92), transparent 62%),
+    radial-gradient(ellipse 90% 70% at 50% 118%, rgba(198, 46, 30, 0.95), transparent 66%),
+    linear-gradient(0deg, #2a0b06 0%, rgba(42, 11, 6, 0) 55%);
+  filter: blur(2px);
+  animation: burn-rise 2600ms ease-in forwards;
+}
+
+@keyframes burn-rise {
+  0% {
+    transform: translateY(100%) scaleY(0.9);
+    opacity: 0.9;
+  }
+  55% {
+    transform: translateY(0%) scaleY(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-6%) scaleY(1.1);
+    opacity: 0;
+  }
+}
+
+@keyframes burn-blacken {
+  0% {
+    background: rgba(10, 4, 2, 0);
+  }
+  60% {
+    background: rgba(10, 4, 2, 0.35);
+  }
+  100% {
+    background: #000000;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Closing screen
+
+   Terminal, full-screen black with a single centered line. No controls, no
+   navigation.
+--------------------------------------------------------------------------- */
+.closing {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  width: 100%;
+  padding: 2rem;
+  background: #000000;
+}
+
+.closingText {
+  max-width: 22rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 1.4rem;
+  line-height: 1.55;
+  text-align: center;
+  letter-spacing: 0.01em;
+  color: rgba(255, 244, 248, 0.9);
+}
+
+@media (min-width: 640px) {
+  .closingText {
+    font-size: 1.7rem;
+  }
+}
+
+/* Under reduced motion the burn is skipped in the component; if the overlay is
+   ever mounted, collapse its animation so it does not linger. */
+@media (prefers-reduced-motion: reduce) {
+  .burn,
+  .burnFlames {
+    animation: none;
+  }
+
+  .burn {
+    background: #000000;
+  }
+}

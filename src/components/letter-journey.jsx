@@ -7,7 +7,7 @@ import Opening from "@/components/opening"
 import MemoryTrust from "@/components/memory-trust"
 import Wishes from "@/components/wishes"
 import Farewell from "@/components/farewell"
-import ReelOpener from "@/components/reel-opener"
+import ReelScroller from "@/components/reel-scroller"
 
 const CHAPTERS = ["opening", "memory", "wishes", "farewell", "reels"]
 
@@ -48,7 +48,7 @@ export default function LetterJourney({ onAtmosphereChange, onTrack }) {
           {chapter === "memory" && <MemoryTrust onContinue={next} />}
           {chapter === "wishes" && <Wishes onContinue={next} />}
           {chapter === "farewell" && <Farewell onContinue={next} onTrack={onTrack} />}
-          {chapter === "reels" && <ReelOpener />}
+          {chapter === "reels" && <ReelScroller onTrack={onTrack} />}
         </motion.div>
       </AnimatePresence>
     </div>

@@ -1,0 +1,308 @@
+{
+  "pbtResults": {
+    "1.4 Write property test for the phase decision function": {
+      "status": "passed",
+      "lastRunTimestamp": 1788170187125
+    }
+  },
+  "executionHistory": {
+    "1.1 Create the pure reel-state helper module": [
+      {
+        "executionId": "985797fc-e33c-407d-a0b3-4b2b14131242",
+        "chatSessionId": "sess_0271c402-bd84-4d72-8ca7-f64972d29f40",
+        "timestamp": 1788165936987
+      },
+      {
+        "executionId": "985797fc-e33c-407d-a0b3-4b2b14131242",
+        "chatSessionId": "sess_0271c402-bd84-4d72-8ca7-f64972d29f40",
+        "timestamp": 1788166023387
+      }
+    ],
+    "1.2 Set up vitest and fast-check": [
+      {
+        "executionId": "985797fc-e33c-407d-a0b3-4b2b14131242",
+        "chatSessionId": "sess_0271c402-bd84-4d72-8ca7-f64972d29f40",
+        "timestamp": 1788166029907
+      },
+      {
+        "executionId": "985797fc-e33c-407d-a0b3-4b2b14131242",
+        "chatSessionId": "sess_0271c402-bd84-4d72-8ca7-f64972d29f40",
+        "timestamp": 1788166182006
+      }
+    ],
+    "1.3 Write property test for the viewed-set logic": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166201415
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166451467
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170088962
+      }
+    ],
+    "1.4 Write property test for the phase decision function": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166201551
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166453922
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170105812
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170111393
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170241254
+      }
+    ],
+    "2.1 Add reels-button and reels-timing validation and record shape": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166201799
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166217074
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166443665
+      }
+    ],
+    "2.2 Write property test for the visits event validator": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166201921
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166454289
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170089313
+      }
+    ],
+    "2.3 Write unit test for the visits API record shape": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166202059
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166455226
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170090701
+      }
+    ],
+    "3. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166202229
+      }
+    ],
+    "4.1 Create the scroll-snap and effect stylesheet": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166202373
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166218226
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166444847
+      }
+    ],
+    "4.2 Implement the PlaybackBar piece": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166202534
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166456278
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170092616
+      }
+    ],
+    "4.3 Implement the BurnOverlay and ClosingScreen pieces": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166202656
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170112611
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170245129
+      }
+    ],
+    "5.1 Implement fetch, scroll-snap feed, and active-slide playback": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166202798
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170258905
+      }
+    ],
+    "5.2 Implement auto-advance, viewed tracking, and the burn/close state machine": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166202980
+      }
+    ],
+    "5.3 Write unit tests for ReelScroller wiring": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166203094
+      }
+    ],
+    "5.4 Write unit tests for PlaybackBar, BurnOverlay, and ClosingScreen": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166203247
+      }
+    ],
+    "6. Checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166203423
+      }
+    ],
+    "7.1 Replace the farewell text link with a floating entry button": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166203519
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170113794
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170242692
+      }
+    ],
+    "7.2 Render ReelScroller from LetterJourney": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166203661
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170114868
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170240103
+      }
+    ],
+    "7.3 Write unit tests for farewell and orchestration": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166203765
+      },
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170259876
+      }
+    ],
+    "8.1 Delete ReelOpener and its unused styles": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166203868
+      }
+    ],
+    "9. Final checkpoint - lint and build": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788166203991
+      }
+    ],
+    "2. Extend the visits API for the new events": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170090888
+      }
+    ],
+    "1. Extract pure reel-state helpers and set up the test runner": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170241510
+      }
+    ],
+    "4. Build the ReelScroller styles and internal pieces": [
+      {
+        "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788170245260
+      }
+    ]
+  }
+}

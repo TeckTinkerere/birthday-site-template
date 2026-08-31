@@ -1,11 +1,9 @@
 import { createHmac, randomUUID, timingSafeEqual } from "node:crypto"
 import { Redis } from "@upstash/redis"
+import { validateVisitEvent } from "@/lib/reel-state"
 
 export const runtime = "nodejs"
 
-const CHAPTERS = new Set(["opening", "memory", "wishes", "farewell", "reels"])
-const EVENT_TYPES = new Set(["chapter", "reels-choice"])
-const REEL_ACTIONS = new Set(["stay", "watch"])
 const MAX_EVENT_BYTES = 1024
 const MAX_EVENTS_PER_MINUTE = 20
 const COOKIE_NAME = "birthday_visit"
@@ -92,15 +90,11 @@ export async function POST(request) {
     return Response.json({ error: "Invalid visit event" }, { status: 400 })
   }
 
-  const { type, chapter, action } = payload
-  if (
-    !EVENT_TYPES.has(type) ||
-    !CHAPTERS.has(chapter) ||
-    (type === "reels-choice" && !REEL_ACTIONS.has(action)) ||
-    (type === "chapter" && action !== undefined)
-  ) {
+  if (!validateVisitEvent(payload)) {
     return Response.json({ error: "Invalid visit event" }, { status: 400 })
   }
+
+  const { type, chapter, action, phase } = payload
 
   try {
     if (await isRateLimited(redis, request, sessionId, secret)) {
@@ -113,6 +107,7 @@ export async function POST(request) {
       type,
       chapter,
       ...(type === "reels-choice" ? { action } : {}),
+      ...(type === "reels-timing" ? { phase } : {}),
       timestamp: new Date().toISOString(),
       session: createHmac("sha256", secret).update(sessionId).digest("hex"),
       device: deviceFromUserAgent(userAgent),
