@@ -18,6 +18,7 @@ const ATMOSPHERE_CLASS = {
   quiet: "atmosphere-quiet",
   hope: "atmosphere-hope",
   light: "atmosphere-light",
+  silent: "atmosphere-hope",
 }
 
 const initBubbles = (engine) => loadBubblesPreset(engine)
@@ -50,6 +51,7 @@ const ATMOSPHERE_VOLUME = {
   quiet: 0.22,
   hope: 0.42,
   light: 0.3,
+  silent: 0,
 }
 
 export default function Home() {
@@ -74,6 +76,10 @@ export default function Home() {
     const audio = audioRef.current
     if (!audio) return
     audio.volume = isMuted ? 0 : (ATMOSPHERE_VOLUME[atmosphere] ?? 0.3)
+    // The reels carry their own sound, so the music stops there entirely and
+    // picks back up if she goes back to the letter.
+    if (atmosphere === "silent") audio.pause()
+    else if (hasOpened) audio.play().catch(() => {})
   }, [atmosphere, isMuted, hasOpened])
 
   useEffect(() => {
@@ -167,7 +173,7 @@ export default function Home() {
         />
       )}
 
-      {hasOpened && (
+      {hasOpened && atmosphere !== "silent" && (
         <button
           type="button"
           onClick={() => setIsMuted((muted) => !muted)}

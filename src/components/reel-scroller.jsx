@@ -123,6 +123,7 @@ export default function ReelScroller({ onTrack }) {
   const [status, setStatus] = useState("loading")
   const [videos, setVideos] = useState([])
   const [activeIndex, setActiveIndex] = useState(0)
+  const [soundBlocked, setSoundBlocked] = useState(false)
 
   // Active-reel playback progress, surfaced through the PlaybackBar.
   const [currentTime, setCurrentTime] = useState(0)
@@ -192,7 +193,15 @@ export default function ReelScroller({ onTrack }) {
       if (!video) return
       if (index === activeIndex && !reduceMotion) {
         const played = video.play()
-        if (played && typeof played.catch === "function") played.catch(() => {})
+        if (played && typeof played.catch === "function") {
+          // Some browsers refuse sound without a tap (e.g. after auto-advance).
+          // Fall back to silent playback and offer a tap-for-sound button.
+          played.catch(() => {
+            video.muted = true
+            video.play().catch(() => {})
+            setSoundBlocked(true)
+          })
+        }
       } else {
         video.pause()
       }
@@ -285,6 +294,14 @@ export default function ReelScroller({ onTrack }) {
     }
   }, [activeIndex, videos])
 
+  const enableSound = () => {
+    videoRefs.current.forEach((video) => {
+      if (video) video.muted = false
+    })
+    videoRefs.current[activeIndex]?.play().catch(() => {})
+    setSoundBlocked(false)
+  }
+
   const seekActive = (seconds) => {
     const video = videoRefs.current[activeIndex]
     if (!video) return
@@ -332,9 +349,8 @@ export default function ReelScroller({ onTrack }) {
                 videoRefs.current[index] = element
               }}
               className={styles.video}
-              muted
               playsInline
-              preload={index === activeIndex ? "metadata" : "none"}
+              preload={index === activeIndex || index === activeIndex + 1 ? "auto" : "none"}
             >
               <source src={video.src} type={video.type} />
               Your browser cannot play this video.
@@ -349,6 +365,16 @@ export default function ReelScroller({ onTrack }) {
           </section>
         ))}
       </div>
+
+      {soundBlocked && phase === "playing" && (
+        <button
+          type="button"
+          onClick={enableSound}
+          className="font-body fixed left-1/2 top-5 z-30 -translate-x-1/2 rounded-full border border-white/40 bg-black/50 px-4 py-2 text-xs uppercase tracking-[0.14em] text-white backdrop-blur-sm"
+        >
+          Tap for sound
+        </button>
+      )}
 
       {/* Burn/close phase transitions driven by viewed-tracking state machine. */}
       {phase === "burning" && <BurnOverlay onComplete={() => setPhase("closed")} />}

@@ -16,7 +16,7 @@ const ATMOSPHERE = {
   memory: "quiet",
   wishes: "hope",
   farewell: "light",
-  reels: "hope",
+  reels: "silent",
 }
 
 export default function LetterJourney({ onAtmosphereChange, onTrack }) {
