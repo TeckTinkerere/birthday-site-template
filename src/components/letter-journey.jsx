@@ -34,8 +34,27 @@ export default function LetterJourney({ onAtmosphereChange, onTrack }) {
     if (index < CHAPTERS.length - 1) setChapter(CHAPTERS[index + 1])
   }
 
+  const back = () => {
+    const index = CHAPTERS.indexOf(chapter)
+    if (index > 0) setChapter(CHAPTERS[index - 1])
+  }
+
+  // Hidden on the opening (nothing before it) and on the reels, whose ending
+  // is one-way.
+  const canGoBack = chapter !== "opening" && chapter !== "reels"
+
   return (
     <div className="letter-journey w-full">
+      {canGoBack && (
+        <button
+          type="button"
+          onClick={back}
+          aria-label="Go back to the previous page"
+          className="font-body fixed left-4 top-4 z-30 px-2 py-2 text-lg leading-none text-[var(--muted)] opacity-50 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+        >
+          <span aria-hidden>&larr;</span>
+        </button>
+      )}
       <AnimatePresence mode="wait">
         <motion.div
           key={chapter}

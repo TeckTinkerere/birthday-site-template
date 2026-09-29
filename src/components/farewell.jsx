@@ -103,15 +103,6 @@ export default function Farewell({ onContinue, onTrack }) {
           ))}
         </div>
 
-        <motion.p
-          className="font-display mt-14 text-2xl tracking-wide text-[var(--wish-ink)] sm:text-[1.75rem]"
-          initial={reduceMotion ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.6, delay: delay(3.6) }}
-        >
-          Happy birthday.
-        </motion.p>
-
         <div className="mt-12 space-y-5">
           {EXAMS.map((line, index) => (
             <motion.p
@@ -119,18 +110,27 @@ export default function Farewell({ onContinue, onTrack }) {
               className="font-body text-pretty text-[1.05rem] leading-relaxed text-[var(--wish-ink-soft)] sm:text-lg"
               initial={reduceMotion ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(4.4 + index * 0.6) }}
+              transition={{ type: "spring", bounce: 0, duration: 1, delay: delay(3.6 + index * 0.6) }}
             >
               {line}
             </motion.p>
           ))}
         </div>
 
+        <motion.p
+          className="font-display mt-14 text-2xl tracking-wide text-[var(--wish-ink)] sm:text-[1.75rem]"
+          initial={reduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.6, delay: delay(5.4) }}
+        >
+          Happy birthday.
+        </motion.p>
+
         <motion.div
           className="mt-12"
           initial={reduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.2, delay: delay(6.2) }}
+          transition={{ duration: 1.2, delay: delay(7) }}
         >
           <p className="font-body text-xs uppercase tracking-[0.16em] text-[var(--wish-muted)]">
             {staying ? "Take all the time you need." : "You can close this whenever you like."}

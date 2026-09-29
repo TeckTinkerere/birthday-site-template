@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 
 import useReduceMotion from "@/lib/use-reduce-motion"
+import { addViewed, allViewed, nextPhase } from "@/lib/reel-state"
 import styles from "@/components/reel-scroller.module.css"
 
 /* Matches the `.burn`/`.burnFlames` keyframe duration in the stylesheet. */
@@ -108,10 +109,12 @@ function ClosingScreen() {
    list once, snaps one reel per 100dvh, and plays whichever reel is centered
    while pausing the rest. The active reel's progress drives the PlaybackBar.
 
-   The viewed tracking and burn/close state machine (task 5.2) are not wired in
-   yet. The phase state field and the BurnOverlay/ClosingScreen render seams are
-   present but left inert here so task 5.2 can complete them without reshaping
-   this component.
+   The viewed-tracking state machine marks each reel as viewed (via addViewed)
+   on its first play event (full motion) or on becoming the active snapped
+   slide (reduced motion). When allViewed is true, the exit timing event is
+   emitted once and the phase transitions through nextPhase to burning (full
+   motion) or closed (reduced motion). BurnOverlay and ClosingScreen render
+   based on the current phase.
 --------------------------------------------------------------------------- */
 
 export default function ReelScroller({ onTrack }) {
@@ -125,9 +128,10 @@ export default function ReelScroller({ onTrack }) {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
 
-  // Burn/close state machine seam for task 5.2. Kept present but inert here.
+  // Viewed-tracking and burn/close state machine.
   const [viewedIds, setViewedIds] = useState(() => new Set())
   const [phase, setPhase] = useState("playing")
+  const exitEmittedRef = useRef(false)
 
   const videoRefs = useRef([])
   const slideRefs = useRef([])
@@ -194,6 +198,69 @@ export default function ReelScroller({ onTrack }) {
       }
     })
   }, [activeIndex, reduceMotion, videos])
+
+  // Auto-advance: when the active reel ends, scroll to the next slide.
+  // The last reel does not advance or loop.
+  useEffect(() => {
+    const video = videoRefs.current[activeIndex]
+    if (!video) return
+
+    const handleEnded = () => {
+      const nextIndex = activeIndex + 1
+      if (nextIndex < videos.length) {
+        const nextSlide = slideRefs.current[nextIndex]
+        if (nextSlide) {
+          nextSlide.scrollIntoView({
+            behavior: reduceMotion ? "instant" : "smooth",
+          })
+        }
+      }
+    }
+
+    video.addEventListener("ended", handleEnded)
+    return () => video.removeEventListener("ended", handleEnded)
+  }, [activeIndex, videos, reduceMotion])
+
+  // Viewed tracking (full motion): mark the reel viewed on its first `play`
+  // event while it is the active slide.
+  useEffect(() => {
+    if (reduceMotion) return
+
+    const video = videoRefs.current[activeIndex]
+    if (!video) return
+
+    const handlePlay = () => {
+      const src = videos[activeIndex]?.src
+      if (src) {
+        setViewedIds((prev) => addViewed(prev, src))
+      }
+    }
+
+    video.addEventListener("play", handlePlay)
+    return () => video.removeEventListener("play", handlePlay)
+  }, [activeIndex, videos, reduceMotion])
+
+  // Viewed tracking (reduced motion): mark the reel viewed when it becomes the
+  // active snapped slide, since autoplay is intentionally suppressed.
+  useEffect(() => {
+    if (!reduceMotion) return
+    if (status !== "ready" || videos.length === 0) return
+
+    const src = videos[activeIndex]?.src
+    if (src) {
+      setViewedIds((prev) => addViewed(prev, src))
+    }
+  }, [activeIndex, reduceMotion, status, videos])
+
+  // All-viewed gate: emit exit timing event exactly once, then transition phase.
+  useEffect(() => {
+    if (!allViewed(viewedIds, videos)) return
+    if (exitEmittedRef.current) return
+
+    exitEmittedRef.current = true
+    onTrack?.({ type: "reels-timing", chapter: "reels", phase: "exit" })
+    setPhase(nextPhase(viewedIds, videos, reduceMotion))
+  }, [viewedIds, videos, reduceMotion, onTrack])
 
   // Bind the PlaybackBar to the active reel via timeupdate/durationchange.
   useEffect(() => {
@@ -283,7 +350,7 @@ export default function ReelScroller({ onTrack }) {
         ))}
       </div>
 
-      {/* Burn/close render seam for task 5.2. Inert while phase stays "playing". */}
+      {/* Burn/close phase transitions driven by viewed-tracking state machine. */}
       {phase === "burning" && <BurnOverlay onComplete={() => setPhase("closed")} />}
       {phase === "closed" && <ClosingScreen />}
     </>

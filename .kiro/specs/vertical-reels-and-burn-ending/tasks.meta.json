@@ -130,6 +130,16 @@
         "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
         "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
         "timestamp": 1788166202229
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788231745256
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788232206079
       }
     ],
     "4.1 Create the scroll-snap and effect stylesheet": [
@@ -193,6 +203,11 @@
         "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
         "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
         "timestamp": 1788170258905
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788227392380
       }
     ],
     "5.2 Implement auto-advance, viewed tracking, and the burn/close state machine": [
@@ -200,6 +215,16 @@
         "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
         "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
         "timestamp": 1788166202980
+      },
+      {
+        "executionId": "a5bd6232-a0e7-40f6-9e48-a9c5ada8fd3b",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788192200640
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788227339015
       }
     ],
     "5.3 Write unit tests for ReelScroller wiring": [
@@ -207,6 +232,16 @@
         "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
         "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
         "timestamp": 1788166203094
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788227409461
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788231723944
       }
     ],
     "5.4 Write unit tests for PlaybackBar, BurnOverlay, and ClosingScreen": [
@@ -214,6 +249,16 @@
         "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
         "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
         "timestamp": 1788166203247
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788227415803
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788231728861
       }
     ],
     "6. Checkpoint - Ensure all tests pass": [
@@ -221,6 +266,16 @@
         "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
         "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
         "timestamp": 1788166203423
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788232223993
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788232284274
       }
     ],
     "7.1 Replace the farewell text link with a floating entry button": [
@@ -267,6 +322,11 @@
         "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
         "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
         "timestamp": 1788170259876
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788232211889
       }
     ],
     "8.1 Delete ReelOpener and its unused styles": [
@@ -274,6 +334,16 @@
         "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
         "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
         "timestamp": 1788166203868
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788227419705
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788231733909
       }
     ],
     "9. Final checkpoint - lint and build": [
@@ -281,6 +351,16 @@
         "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
         "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
         "timestamp": 1788166203991
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788232289130
+      },
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788232487723
       }
     ],
     "2. Extend the visits API for the new events": [
@@ -302,6 +382,27 @@
         "executionId": "3ecb7c10-f361-4489-9604-b81c87599610",
         "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
         "timestamp": 1788170245260
+      }
+    ],
+    "5. Implement the ReelScroller component": [
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788231729071
+      }
+    ],
+    "8. Remove the old horizontal reel experience": [
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788231734097
+      }
+    ],
+    "7. Wire the farewell entry and orchestration": [
+      {
+        "executionId": "030c3c76-6c57-4250-963d-bf445fde7351",
+        "chatSessionId": "sess_c5fd3319-5f6e-4ec9-9e93-13d6fe4ee7e1",
+        "timestamp": 1788232212141
       }
     ]
   }

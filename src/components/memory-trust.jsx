@@ -24,6 +24,10 @@ const LINES = [
     text: "But missing someone doesn't mean holding onto them. Sometimes it just means being glad they were there for part of your life.",
     dwell: 4600,
   },
+  {
+    text: "I only know I wish you well, always, and that I'm glad I knew you.",
+    dwell: 3400,
+  },
 ]
 
 const FINAL = "And I'm learning to be okay with that."

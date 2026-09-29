@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@import "swiper/css";
-@import "swiper/css/pagination";
 
 :root {
   --background: #fbe9ee;
@@ -67,51 +65,6 @@ body {
   background: linear-gradient(170deg, rgba(254, 250, 248, 0.74) 0%, rgba(253, 244, 244, 0.72) 45%, rgba(250, 239, 244, 0.74) 100%);
 }
 
-.reel-swiper {
-  width: 100%;
-  padding: 8px 0 42px;
-}
-
-.reel-swiper__slide {
-  width: min(76vw, 286px);
-}
-
-.reel-card {
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 2rem;
-  background: rgba(255, 252, 253, 0.84);
-  box-shadow: 0 20px 54px rgba(123, 58, 80, 0.2);
-}
-
-.reel-card__video {
-  display: block;
-  aspect-ratio: 9 / 16;
-  width: 100%;
-  background: #3a2630;
-  object-fit: cover;
-}
-
-.reel-card__label {
-  padding: 0.8rem 1rem 0.9rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--wish-muted);
-}
-
-.reel-swiper .swiper-pagination-bullet {
-  width: 6px;
-  height: 6px;
-  background: var(--wish-accent);
-  opacity: 0.35;
-}
-
-.reel-swiper .swiper-pagination-bullet-active {
-  width: 18px;
-  border-radius: 99px;
-  opacity: 0.9;
-}
 
 :focus-visible {
   outline: 2px solid var(--accent);

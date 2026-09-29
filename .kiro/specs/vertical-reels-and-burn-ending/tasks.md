@@ -57,7 +57,7 @@ Each step builds on the previous, ending with everything wired together.
   - Assert a stored `reels-timing` record includes `phase` and a server-generated `timestamp`, and that no record includes an IP or location field
   - _Requirements: 6.4_
 
-- [~] 3. Checkpoint - Ensure all tests pass
+- [x] 3. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [x] 4. Build the ReelScroller styles and internal pieces
@@ -77,8 +77,8 @@ Each step builds on the previous, ending with everything wired together.
     - Add internal `ClosingScreen`: fixed full-screen black background, centered text exactly "Have a happy day ahead. I'll miss you.", terminal with no controls or navigation
     - _Requirements: 4.3, 4.4, 5.1, 5.2, 5.3_
 
-- [ ] 5. Implement the ReelScroller component
-  - [-] 5.1 Implement fetch, scroll-snap feed, and active-slide playback
+- [x] 5. Implement the ReelScroller component
+  - [x] 5.1 Implement fetch, scroll-snap feed, and active-slide playback
     - Create `src/components/reel-scroller.jsx` accepting an optional `onTrack` prop
     - On mount: fetch `/api/videos`, hold `status`/`videos`; emit `onTrack({ type: "reels-timing", chapter: "reels", phase: "enter" })` once
     - Render one video slide per `100dvh` using the module CSS; use `IntersectionObserver` (threshold ~0.6) over `slideRefs` to set `activeIndex`
@@ -87,25 +87,25 @@ Each step builds on the previous, ending with everything wired together.
     - Handle empty (`status === "ready" && videos.length === 0`) and `error` states with calm messages and no burn
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.7, 3.1, 3.2, 6.2_
 
-  - [~] 5.2 Implement auto-advance, viewed tracking, and the burn/close state machine
+  - [x] 5.2 Implement auto-advance, viewed tracking, and the burn/close state machine
     - On active reel `ended`: `scrollIntoView` the next slide; the last reel does not advance or loop
     - Mark a reel viewed (via `addViewed`) on its first `play` while active (full motion) or on becoming the active snapped slide (reduced motion)
     - When `allViewed` is true: emit `onTrack({ type: "reels-timing", chapter: "reels", phase: "exit" })` exactly once, then set `phase` via `nextPhase` (`burning` full motion, `closed` reduced motion)
     - Render `BurnOverlay` when `phase === "burning"` (moving to `closed` on complete) and `ClosingScreen` when `phase === "closed"`; never emit a burn/closing event
     - _Requirements: 2.5, 2.6, 4.1, 4.2, 4.4, 4.5, 6.3, 6.6_
 
-- [~] 5.3 Write unit tests for ReelScroller wiring
+- [x] 5.3 Write unit tests for ReelScroller wiring
   - Emits `reels-timing`/`enter` once on mount; active slide plays and others pause (mocked `play`/`pause`); `ended` scrolls the next slide and the last reel does not advance; reaching all-viewed emits `reels-timing`/`exit` exactly once and no burn/closing event
   - _Requirements: 2.3, 2.4, 2.5, 2.6, 6.2, 6.3, 6.6_
 
-- [~] 5.4 Write unit tests for PlaybackBar, BurnOverlay, and ClosingScreen
+- [x] 5.4 Write unit tests for PlaybackBar, BurnOverlay, and ClosingScreen
   - PlaybackBar tracks `timeupdate` and seeks on change with an accessible label; BurnOverlay `animationend` and the timeout fallback both move to the closing screen; ClosingScreen has a black background, the exact copy, and no navigation controls
   - _Requirements: 3.2, 3.3, 3.4, 4.4, 5.1, 5.2, 5.3_
 
-- [~] 6. Checkpoint - Ensure all tests pass
+- [x] 6. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 7. Wire the farewell entry and orchestration
+- [x] 7. Wire the farewell entry and orchestration
   - [x] 7.1 Replace the farewell text link with a floating entry button
     - In `src/components/farewell.jsx`, remove the `ChapterLink` "Watch a little more" link
     - Add a single small floating native `<button>` fixed near the bottom-center, shown only when `hasReels` is true, with an accessible label (e.g. `aria-label="Watch a few moments in motion"`), keyboard-focusable and operable
@@ -118,18 +118,18 @@ Each step builds on the previous, ending with everything wired together.
     - Keep the chapter list and atmosphere map unchanged (`reels` remains the final chapter)
     - _Requirements: 2.8_
 
-- [-] 7.3 Write unit tests for farewell and orchestration
+- [x] 7.3 Write unit tests for farewell and orchestration
   - Entry button shown only when reels exist and the old link is removed; activating it calls `onContinue` and emits `reels-button`; with consent declined no tracking events are sent; `LetterJourney` renders `ReelScroller` (not `ReelOpener`) for the reels chapter
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 2.8, 6.5_
 
-- [ ] 8. Remove the old horizontal reel experience
-  - [~] 8.1 Delete ReelOpener and its unused styles
+- [x] 8. Remove the old horizontal reel experience
+  - [x] 8.1 Delete ReelOpener and its unused styles
     - Delete `src/components/reel-opener.jsx`
     - Remove the now-unused `.reel-*` Swiper styles from `src/app/globals.css`
     - Confirm no remaining references to `ReelOpener` or the removed styles
     - _Requirements: 2.8_
 
-- [~] 9. Final checkpoint - lint and build
+- [x] 9. Final checkpoint - lint and build
   - Run `npm run lint` and `npm run build` and fix any issues; ensure all tests pass
   - _Requirements: 5 (NFR 5)_
 

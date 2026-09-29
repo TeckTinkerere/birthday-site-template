@@ -2,6 +2,7 @@ import { readdir } from "node:fs/promises"
 import path from "node:path"
 
 export const runtime = "nodejs"
+export const dynamic = "force-static"
 
 const VIDEO_TYPES = {
   ".mp4": "video/mp4",

@@ -6,8 +6,8 @@ import ChapterLink from "@/components/chapter-link"
 import { BIRTHDAY_LABEL, RECIPIENT } from "@/lib/content"
 
 const LINES = [
-  "That's the date, and I wanted to mark it properly. Just once.",
-  "It's a short letter. Nothing in it needs a reply.",
+  "A small birthday message, nothing more than that.",
+  "Read as much or as little as you like. It doesn't need a reply.",
 ]
 
 export default function Opening({ onContinue }) {
@@ -59,7 +59,7 @@ export default function Opening({ onContinue }) {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.9, delay: reduceMotion ? 0 : 2.2 }}
         >
-          <ChapterLink onClick={onContinue}>Read it</ChapterLink>
+          <ChapterLink onClick={onContinue}>Open it if you&apos;d like</ChapterLink>
         </motion.div>
       </div>
     </section>
